@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Card,
   CardContent,
@@ -8,20 +8,20 @@ import {
   Tooltip,
   IconButton,
   Chip,
-} from "@mui/material";
-import WbCloudyIcon from "@mui/icons-material/WbCloudy";
-import AirIcon from "@mui/icons-material/Air";
-import OpacityIcon from "@mui/icons-material/Opacity";
-import VisibilityIcon from "@mui/icons-material/Visibility";
-import CompressIcon from "@mui/icons-material/Compress";
-import DeviceThermostatIcon from "@mui/icons-material/DeviceThermostat";
-import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import FiberMannualRecordIcon from "@mui/icons-material/FiberManualRecord";
+} from '@mui/material';
+import WbCloudyIcon from '@mui/icons-material/WbCloudy';
+import AirIcon from '@mui/icons-material/Air';
+import OpacityIcon from '@mui/icons-material/Opacity';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import CompressIcon from '@mui/icons-material/Compress';
+import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import FiberMannualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 interface WeatherCardProps {
   time: string;
   temperature: number;
-  temperatureUnit?: "F" | "C";
+  temperatureUnit?: 'F' | 'C';
   condition: string;
   feelsLike: number;
   summary: string;
@@ -36,7 +36,7 @@ interface WeatherCardProps {
 const WeatherCard: React.FC<WeatherCardProps> = ({
   time,
   temperature,
-  temperatureUnit = "F",
+  temperatureUnit = 'F',
   condition,
   feelsLike,
   summary,
@@ -47,16 +47,29 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
   pressure,
   dewPoint,
 }) => (
-  <Card className="glass-effect"
+  // <Card className="glass-effect"
+  //   sx={{
+  //     // background: "linear-gradient(135deg, #22304a 0%, #2d3956 100%)",
+  //     background: "linear-gradient(135deg, #3a4b6a 0%, #4a5a78 100%)",
+  //     color: "#fff",
+  //     borderRadius: 4,
+  //     p: 2,
+  //   }}
+  // >
+  <Card
     sx={{
-      background: "linear-gradient(135deg, #22304a 0%, #2d3956 100%)",
-      color: "#fff",
+      background: 'linear-gradient(135deg, rgba(58, 75, 106, 0.8) 0%, rgba(74, 90, 120, 0.5) 100%)',
+      color: '#fff',
       borderRadius: 4,
       p: 2,
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)', // for Safari support
+      border: '1px solid rgba(255, 255, 255, 0.1)',
+      boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)',
     }}
   >
     <CardContent>
-      <Box display="flex" justifyContent="space-between" alignItems="center">
+      <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap={'wrap'}>
         <Box>
           <Typography variant="subtitle2" color="inherit">
             Current weather
@@ -71,10 +84,10 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
             label="Seeing different weather?"
             size="small"
             sx={{
-              background: "rgba(255,255,255,0.08)",
-              color: "#fff",
+              background: 'rgba(255,255,255,0.08)',
+              color: '#fff',
               fontWeight: 500,
-              cursor: "pointer",
+              cursor: 'pointer',
             }}
             clickable
           />
@@ -103,7 +116,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
       <Stack direction="row" spacing={3} mt={2} justifyContent="flex-start">
         <Tooltip title="Air quality index (lower is better)">
           <Box display="flex" alignItems="center">
-            <FiberMannualRecordIcon sx={{ mr: 0.5, color: "#4caf50" }} />
+            <FiberMannualRecordIcon sx={{ mr: 0.5, color: '#4caf50' }} />
             <Typography variant="body2">{airQuality}</Typography>
           </Box>
         </Tooltip>

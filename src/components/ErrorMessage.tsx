@@ -1,15 +1,15 @@
 import React from 'react';
 
 export interface ErrorMessageProps {
-    message: string;
+  message: string;
 }
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message }) => {
-    return (
-        <div className="error-message">
-            <p>{message}</p>
-        </div>
-    );
+  return (
+    <div className="error-message">
+      <p>{message}</p>
+    </div>
+  );
 };
 
 export default ErrorMessage;
