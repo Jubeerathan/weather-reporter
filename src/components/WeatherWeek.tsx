@@ -1,49 +1,59 @@
-import React, { useState, useMemo } from "react";
-import { Box, Tabs, Tab } from "@mui/material";
-import WeatherDay from "./WeatherDay";
-import weatherData from "../../../res.json";
+import React, { useState, useMemo, useCallback } from 'react';
+import { Box, Tabs, Tab } from '@mui/material';
+import WeatherDay from './WeatherDay';
+import weatherData from '../../../res.json';
 
 interface ForecastDay {
   date: string;
-  hour: any[]; // Replace with proper type based on your data structure
+  hour: any[];
+}
+
+interface FormattedDate {
+  short: string;
+  full: string;
 }
 
 const WeatherWeek: React.FC = () => {
   const [selectedTab, setSelectedTab] = useState(0);
 
-  // Memoize forecast days to prevent unnecessary recalculations
-  const forecastDays = useMemo(
-    () => weatherData.forecast.forecastday.slice(0, 7) as ForecastDay[],
-    []
-  );
+  // Memoize forecast days and formatted dates
+  const { forecastDays, formattedDates } = useMemo(() => {
+    const days = weatherData.forecast.forecastday.slice(0, 7) as ForecastDay[];
+    const dates = days.map((day): FormattedDate => {
+      const date = new Date(day.date);
+      return {
+        short: date.toLocaleDateString('en-US', {
+          weekday: 'short',
+          month: 'short',
+          day: 'numeric',
+        }),
+        full: date.toLocaleDateString(),
+      };
+    });
 
-  // Memoize formatted dates for better performance
-  const formattedDates = useMemo(
-    () =>
-      forecastDays.map((day) => {
-        const date = new Date(day.date);
-        return {
-          short: date.toLocaleDateString("en-US", { 
-            weekday: "short", 
-            month: "short", 
-            day: "numeric" 
-          }),
-          full: date.toLocaleDateString()
-        };
-      }),
-    [forecastDays]
-  );
+    return { forecastDays: days, formattedDates: dates };
+  }, []);
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+  const handleTabChange = useCallback((_event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
-  };
+  }, []);
 
   const selectedDay = forecastDays[selectedTab];
 
   return (
-    <Box sx={{ width: "100%", overflow: "hidden" }}>
-      {/* Horizontal scrollable tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+    <Box sx={{ width: '100%', mt: 3 }}>
+      <Box
+        sx={{
+          width: '100%',
+          borderRadius: 3,
+          background:
+            'linear-gradient(135deg, rgba(135, 206, 235, 0.2) 0%, rgba(176, 224, 255, 0.15) 100%)',
+          backdropFilter: 'blur(20px)',
+          border: '1px solid rgba(176, 224, 255, 0.3)',
+          overflow: 'hidden',
+          boxShadow: '0 8px 32px rgba(15, 76, 117, 0.1)',
+        }}
+      >
         <Tabs
           value={selectedTab}
           onChange={handleTabChange}
@@ -52,20 +62,33 @@ const WeatherWeek: React.FC = () => {
           scrollButtons="auto"
           allowScrollButtonsMobile
           sx={{
-            "& .MuiTabs-flexContainer": {
-              gap: 1,
+            '& .MuiTabs-flexContainer': {
+              gap: 0.5,
             },
-            "& .MuiTab-root": {
-              minWidth: 120,
-              fontSize: "0.875rem",
+            '& .MuiTab-root': {
+              minWidth: 100,
+              fontSize: '0.875rem',
               fontWeight: 500,
-              textTransform: "none",
-              "&:hover": {
-                backgroundColor: "action.hover",
+              textTransform: 'none',
+              color: 'rgba(255, 255, 255, 0.9)',
+              '&:hover': {
+                backgroundColor: 'rgba(176, 224, 255, 0.2)',
+                color: 'white',
+              },
+              '&.Mui-selected': {
+                color: 'white',
+                backgroundColor: 'rgba(135, 206, 235, 0.3)',
+                fontWeight: 600,
               },
             },
-            "& .MuiTabs-scrollButtons": {
-              "&.Mui-disabled": {
+            '& .MuiTabs-indicator': {
+              background: 'linear-gradient(90deg, #87ceeb 0%, #b0e0ff 100%)',
+              height: 3,
+              borderRadius: '2px 2px 0 0',
+            },
+            '& .MuiTabs-scrollButtons': {
+              color: 'rgba(176, 224, 255, 0.8)',
+              '&.Mui-disabled': {
                 opacity: 0.3,
               },
             },
@@ -75,7 +98,7 @@ const WeatherWeek: React.FC = () => {
             <Tab
               key={forecastDays[index].date}
               label={dateInfo.short}
-              title={dateInfo.full} // Tooltip on hover
+              title={dateInfo.full}
               id={`weather-tab-${index}`}
               aria-controls={`weather-tabpanel-${index}`}
             />
@@ -83,22 +106,23 @@ const WeatherWeek: React.FC = () => {
         </Tabs>
       </Box>
 
-      {/* Weather day content */}
       <Box
         sx={{
           mt: 2,
-          p: 1,
+          p: 2,
+          borderRadius: 3,
+          background:
+            'linear-gradient(135deg, rgba(176, 224, 255, 0.1) 0%, rgba(225, 245, 254, 0.1) 100%)',
+          backdropFilter: 'blur(15px)',
+          border: '1px solid rgba(176, 224, 255, 0.2)',
+          boxShadow: '0 4px 20px rgba(15, 76, 117, 0.08)',
         }}
         role="tabpanel"
         id={`weather-tabpanel-${selectedTab}`}
         aria-labelledby={`weather-tab-${selectedTab}`}
       >
         {selectedDay && (
-          <WeatherDay
-            key={selectedDay.date}
-            date={selectedDay.date}
-            hours={selectedDay.hour}
-          />
+          <WeatherDay key={selectedDay.date} date={selectedDay.date} hours={selectedDay.hour} />
         )}
       </Box>
     </Box>
