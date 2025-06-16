@@ -13,7 +13,6 @@ import {
 import MapIcon from '@mui/icons-material/Map';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 
 const WeatherInputCard = () => {
   const [place, setPlace] = useState('');

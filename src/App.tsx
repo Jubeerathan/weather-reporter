@@ -9,7 +9,9 @@ import { WbSunnyRounded } from '@mui/icons-material';
 import WeatherInputCard from './components/WeatherInputCard';
 
 interface WeatherData {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   current: Record<string, any>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   location: Record<string, any>;
 }
 
@@ -23,6 +25,7 @@ const App: React.FC = () => {
       try {
         const data = await fetchWeatherData();
         setWeather(data);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setError(err.message);
       } finally {

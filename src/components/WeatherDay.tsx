@@ -4,6 +4,7 @@ import WeatherHour from './WeatherHourCard';
 
 interface WeatherDayProps {
   date: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hours: any[];
 }
 
