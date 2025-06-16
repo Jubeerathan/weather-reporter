@@ -5,6 +5,7 @@ import weatherData from '../../../res.json';
 
 interface ForecastDay {
   date: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   hour: any[];
 }
 

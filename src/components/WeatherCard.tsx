@@ -1,14 +1,5 @@
 import React from 'react';
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Stack,
-  Tooltip,
-  IconButton,
-  Chip,
-} from '@mui/material';
+import { Card, CardContent, Typography, Box, Stack, Tooltip, Chip } from '@mui/material';
 import WbCloudyIcon from '@mui/icons-material/WbCloudy';
 import AirIcon from '@mui/icons-material/Air';
 import OpacityIcon from '@mui/icons-material/Opacity';
