@@ -13,56 +13,365 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Modern Custom Scrollbar */
+/* ::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
 }
 
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 10px;
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(45deg, #667eea, #764ba2);
+  border-radius: 10px;
+  border: 2px solid #f1f1f1;
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(45deg, #5a6fd8, #6a4190);
 }
 
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
+::-webkit-scrollbar-corner {
+  background: #f1f1f1;
+} */
+
+/* Alternative Dark Theme */
+/* .dark-scrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-track {
+  background: #2d3748;
+  border-radius: 6px;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb {
+  background: #4a5568;
+  border-radius: 6px;
+  border: 1px solid #2d3748;
+}
+
+.dark-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #718096;
+} */
+
+/* Thin Minimalist Style */
+/* .thin-ss */
+
+/* Firefox Support */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #667eea #f1f1f1;
+} */
+
+/* Background effects */
+
+* {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
   }
-  a:hover {
-    color: #747bff;
+
+  body {
+      font-family: 'Arial', sans-serif;
   }
-  button {
-    background-color: #f9f9f9;
+
+  .weather-container {
+      position: relative;
+      width: 100%;
+      /* height: 100vh; */
+      background: linear-gradient(135deg, 
+          #667eea 0%, 
+          #764ba2 25%, 
+          #f093fb 50%, 
+          #f5576c 75%, 
+          #4facfe 100%);
+      background-size: 400% 400%;
+      animation: gradientShift 8s ease infinite;
+      /* overflow: hidden; */
   }
-}
+
+  @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+  }
+
+  .clouds {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+  }
+
+  .cloud {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+      opacity: 0.7;
+      animation: float 20s infinite linear;
+  }
+
+  .cloud::before,
+  .cloud::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50px;
+  }
+
+  .cloud1 {
+      width: 80px;
+      height: 40px;
+      top: 20%;
+      animation-duration: 25s;
+      animation-delay: 0s;
+  }
+
+  .cloud1::before {
+      width: 50px;
+      height: 50px;
+      top: -25px;
+      left: 10px;
+  }
+
+  .cloud1::after {
+      width: 60px;
+      height: 40px;
+      top: -15px;
+      right: 10px;
+  }
+
+  .cloud2 {
+      width: 60px;
+      height: 30px;
+      top: 40%;
+      animation-duration: 30s;
+      animation-delay: -5s;
+  }
+
+  .cloud2::before {
+      width: 40px;
+      height: 40px;
+      top: -20px;
+      left: 8px;
+  }
+
+  .cloud2::after {
+      width: 50px;
+      height: 30px;
+      top: -10px;
+      right: 8px;
+  }
+
+  .cloud3 {
+      width: 100px;
+      height: 50px;
+      top: 60%;
+      animation-duration: 35s;
+      animation-delay: -10s;
+  }
+
+  .cloud3::before {
+      width: 60px;
+      height: 60px;
+      top: -30px;
+      left: 15px;
+  }
+
+  .cloud3::after {
+      width: 70px;
+      height: 50px;
+      top: -20px;
+      right: 15px;
+  }
+
+  @keyframes float {
+      0% {
+          transform: translateX(-100px);
+      }
+      100% {
+          transform: translateX(calc(100vw + 100px));
+      }
+  }
+
+  .particles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+  }
+
+  .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      animation: sparkle 3s infinite ease-in-out;
+  }
+
+  @keyframes sparkle {
+      0%, 100% {
+          opacity: 0;
+          transform: scale(0.5);
+      }
+      50% {
+          opacity: 1;
+          transform: scale(1.2);
+      }
+  }
+
+  .rain {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      opacity: 0.6;
+  }
+
+  .raindrop {
+      position: absolute;
+      width: 2px;
+      height: 20px;
+      background: linear-gradient(to bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.3));
+      border-radius: 0 0 2px 2px;
+      animation: rainfall 1s infinite linear;
+  }
+
+  @keyframes rainfall {
+      0% {
+          transform: translateY(-100px);
+          opacity: 1;
+      }
+      100% {
+          transform: translateY(calc(100vh + 100px));
+          opacity: 0;
+      }
+  }
+
+  .sun {
+      position: absolute;
+      top: 15%;
+      right: 20%;
+      width: 80px;
+      height: 80px;
+      background: radial-gradient(circle, #ffd700 0%, #ffed4a 70%, transparent 70%);
+      border-radius: 50%;
+      animation: sunGlow 4s ease-in-out infinite alternate;
+  }
+
+  .sun::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: -10px;
+      right: -10px;
+      bottom: -10px;
+      background: radial-gradient(circle, rgba(255, 215, 0, 0.3) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: sunRays 6s linear infinite;
+  }
+
+  @keyframes sunGlow {
+      0% {
+          box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+          transform: scale(1);
+      }
+      100% {
+          box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+          transform: scale(1.1);
+      }
+  }
+
+  @keyframes sunRays {
+      0% {
+          transform: rotate(0deg);
+      }
+      100% {
+          transform: rotate(360deg);
+      }
+  }
+
+  .lightning {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      opacity: 0;
+      animation: lightningFlash 8s infinite;
+  }
+
+  @keyframes lightningFlash {
+      0%, 95%, 100% {
+          opacity: 0;
+      }
+      96%, 98% {
+          opacity: 1;
+      }
+  }
+
+  .content-overlay {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+      z-index: 10;
+  }
+
+  .weather-title {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      animation: titlePulse 3s ease-in-out infinite;
+  }
+
+  .weather-subtitle {
+      font-size: 1.2rem;
+      opacity: 0.9;
+      text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+  }
+
+  @keyframes titlePulse {
+      0%, 100% {
+          transform: scale(1);
+      }
+      50% {
+          transform: scale(1.05);
+      }
+  }
+
+  .glass-effect {
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      animation: glassFloat 6s ease-in-out infinite;
+  }
+
+  @keyframes glassFloat {
+      0%, 100% {
+          transform: translateX(0) translateY(0);
+      }
+      50% {
+          transform: translateX(0) translateY(-10px);
+      }
+  }
+
+  /* Responsive design */
+  @media (max-width: 768px) {
+      .weather-title {
+          font-size: 2rem;
+      }
+      
+      .glass-effect {
+          width: 90%;
+          height: 150px;
+      }
+  }
