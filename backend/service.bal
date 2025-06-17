@@ -1,8 +1,10 @@
 import ballerina/http;
 
 configurable string openWeatherApiKey = ?;
+configurable string geminiApiKey = ?;
 
 final http:Client openWeatherClient = check new ("https://api.weatherapi.com/v1/");
+final http:Client geminiClient = check new ("https://generativelanguage.googleapis.com");
 
 service / on new http:Listener(9090) {
     resource function get currentWeather(string city) returns WeatherResponse|error {
@@ -57,5 +59,32 @@ service / on new http:Listener(9090) {
             key = openWeatherApiKey
         );
         return response;
+    }
+
+    resource function get forecastSummary(string city, string days) returns string|error {
+        // Get weather forecast data
+        json forecastRes = check openWeatherClient->/forecast\.json(
+            path = "",
+            headers = {},
+            q = city,
+            key = openWeatherApiKey,
+            days = days
+        );
+        json geminiReq = {
+            contents: [
+                {
+                    parts: [
+                        {
+                            text: string `You're a weather expert. Based on the below data obtained from openweather. Give a detailed summary: ${forecastRes.toJsonString()}`
+                        }
+                    ]
+                }
+            ]
+        };
+        GeminiResponse geminiRes = check geminiClient->/v1beta/models/gemini\-2\.0\-flash\:generateContent.post(
+            geminiReq,
+            key = geminiApiKey
+        );
+        return geminiRes.candidates[0].content.parts[0].text;
     }
 }

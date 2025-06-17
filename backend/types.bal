@@ -210,3 +210,19 @@ type AstronomyResponse record {
 type Astronomy record {
     Astro astro;
 };
+
+type GeminiContent record {
+    GeminiPart[] parts;
+};
+
+type GeminiPart record {
+    string text;
+};
+
+type GeminiResponse record {
+    GeminiCandidate[] candidates;
+};
+
+type GeminiCandidate record {
+    GeminiContent content;
+};
