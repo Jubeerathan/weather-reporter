@@ -1,13 +1,13 @@
 import ballerina/test;
 import ballerina/http;
 
-@test:Mock {
-    moduleName: "ballerina/http",
-    functionName: "createClient"
-}
-function mockCreateClient(string url, *http:ClientConfiguration config) returns http:Client|error {
-    return new MockWeatherClient();
-}
+// @test:Mock {
+//     moduleName: "ballerina/http",
+//     functionName: "createClient"
+// }
+// function mockCreateClient(string url, *http:ClientConfiguration config) returns http:Client|error {
+//     return new MockWeatherClient();
+// }
 
 isolated client class MockWeatherClient {
     remote isolated function get(string path, map<string|string[]>? headers = (), string? targetType = (), http:TargetType target = http:Response) returns http:Response|anydata|http:ClientError {

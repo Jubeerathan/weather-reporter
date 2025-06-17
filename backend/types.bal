@@ -75,14 +75,14 @@ type Day record {
     decimal maxwind_kph;
     decimal totalprecip_mm;
     decimal totalprecip_in;
-    decimal totalsnow_cm;
+    decimal totalsnow_cm?;
     decimal avgvis_km;
     decimal avgvis_miles;
     decimal avghumidity;
-    int daily_will_it_rain;
-    int daily_chance_of_rain;
-    int daily_will_it_snow;
-    int daily_chance_of_snow;
+    int daily_will_it_rain?;
+    int daily_chance_of_rain?;
+    int daily_will_it_snow?;
+    int daily_chance_of_snow?;
     Condition condition;
     decimal uv;
 };
@@ -93,9 +93,9 @@ type Astro record {
     string moonrise;
     string moonset;
     string moon_phase;
-    string moon_illumination;
-    int is_moon_up;
-    int is_sun_up;
+    int moon_illumination;
+    int is_moon_up?;
+    int is_sun_up?;
 };
 
 type Hour record {
@@ -123,10 +123,10 @@ type Hour record {
     decimal heatindex_f;
     decimal dewpoint_c;
     decimal dewpoint_f;
-    int will_it_rain;
-    int chance_of_rain;
-    int will_it_snow;
-    int chance_of_snow;
+    int will_it_rain?;
+    int chance_of_rain?;
+    int will_it_snow?;
+    int chance_of_snow?;
     decimal vis_km;
     decimal vis_miles;
     decimal gust_mph;
@@ -167,7 +167,7 @@ type MarineDay record {
     decimal maxwind_kph;
     decimal totalprecip_mm;
     decimal totalprecip_in;
-    decimal totalsnow_cm;
+    decimal totalsnow_cm?;
     decimal avgvis_km;
     decimal avgvis_miles;
     decimal avghumidity;
