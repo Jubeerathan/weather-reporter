@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
 import WeatherDay from './WeatherDay';
-import weatherData from '../../../res.json';
+import weatherData from './../../res.json';
 
 interface ForecastDay {
   date: string;
