@@ -5,7 +5,7 @@ import ErrorMessage from './components/ErrorMessage';
 import WeatherWeek from './components/WeatherWeek';
 import { fetchWeatherData } from './services/weatherApi';
 import { Typography, CssBaseline, AppBar, Toolbar, Box, Container } from '@mui/material';
-import { WbSunnyRounded } from '@mui/icons-material';
+import WbSunnyRounded from '@mui/icons-material/WbSunnyRounded';
 import WeatherInputCard from './components/WeatherInputCard';
 
 interface WeatherData {

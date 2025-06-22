@@ -221,4 +221,3 @@ export interface GeminiContent {
 export interface GeminiPart {
   text: string;
 }
-

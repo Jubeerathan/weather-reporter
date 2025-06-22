@@ -1,3 +1,5 @@
+// vite.config.ts
+/// <reference types="vitest/config" />
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
@@ -8,10 +10,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: './src/setupTests.ts',
-    deps: {
-      inline: [/^@mui/], // Inline MUI modules to avoid too many file opens
-    },
+    exclude: ['node_modules/**', '@mui'], // Exclude MUI modules to avoid too many file opens
+    include: ['src/**/*.{test,spec}.{ts,tsx}'], // Include test files
   },
 });
-
-

@@ -38,7 +38,9 @@ const WeatherInputCard = () => {
         <CardContent>
           <Grid container spacing={3}>
             {/* Left: Mock Map */}
-            <Grid item xs={12} md={6}>
+            <Grid
+            // item xs={12} md={6}
+            >
               <Box
                 sx={{
                   position: 'relative',
@@ -84,9 +86,9 @@ const WeatherInputCard = () => {
 
             {/* Right: Form */}
             <Grid
-              item
-              xs={12}
-              md={6}
+              // item
+              // xs={12}
+              // // md={6}
               sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3 }}
             >
               <TextField

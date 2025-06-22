@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { WeatherResponse, ForecastResponse, MarineResponse, AstronomyResponse, GeminiResponse } from './responseTypes';
+import type { WeatherResponse } from './responseTypes';
 
 // const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const BASE_URL = import.meta.env.VITE_BACKEND_CHOREO_URL;
