@@ -1,13 +1,14 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
 import WeatherDay from './WeatherDay';
-import weatherData from './../../res.json';
+import type { ForecastDay, ForecastResponse } from '../services/responseTypes';
+import { fetchWeatherForecast } from '../services/weatherApi';
 
-interface ForecastDay {
-  date: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  hour: any[];
-}
+// interface ForecastDay {
+//   date: string;
+//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//   hour: any[];
+// }
 
 interface FormattedDate {
   short: string;
@@ -15,10 +16,25 @@ interface FormattedDate {
 }
 
 const WeatherWeek: React.FC = () => {
+  const [weatherData, setWeatherData] = useState<ForecastResponse | null>(null);
   const [selectedTab, setSelectedTab] = useState(0);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const weatherData = await fetchWeatherForecast();
+        setWeatherData(weatherData);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+    fetchWeather();
+  }, []);
 
   // Memoize forecast days and formatted dates
   const { forecastDays, formattedDates } = useMemo(() => {
+    if (!weatherData) return { forecastDays: [], formattedDates: [] };
+
     const days = weatherData.forecast.forecastday.slice(0, 7) as ForecastDay[];
     const dates = days.map((day): FormattedDate => {
       const date = new Date(day.date);
@@ -33,7 +49,7 @@ const WeatherWeek: React.FC = () => {
     });
 
     return { forecastDays: days, formattedDates: dates };
-  }, []);
+  }, [weatherData]);
 
   const handleTabChange = useCallback((_event: React.SyntheticEvent, newValue: number) => {
     setSelectedTab(newValue);
@@ -123,7 +139,14 @@ const WeatherWeek: React.FC = () => {
         aria-labelledby={`weather-tab-${selectedTab}`}
       >
         {selectedDay && (
-          <WeatherDay key={selectedDay.date} date={selectedDay.date} hours={selectedDay.hour} />
+          <WeatherDay
+            key={selectedDay.date}
+            date={selectedDay.date}
+            hour={selectedDay.hour}
+            date_epoch={selectedDay.date_epoch}
+            day={selectedDay.day}
+            astro={selectedDay.astro}
+          />
         )}
       </Box>
     </Box>

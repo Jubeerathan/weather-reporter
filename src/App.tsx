@@ -3,28 +3,27 @@ import WeatherCard from './components/WeatherCard';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
 import WeatherWeek from './components/WeatherWeek';
-import { fetchWeatherData } from './services/weatherApi';
+import { fetchWeatherData, fetchCurrentWeatherSummary } from './services/weatherApi';
 import { Typography, CssBaseline, AppBar, Toolbar, Box, Container } from '@mui/material';
 import WbSunnyRounded from '@mui/icons-material/WbSunnyRounded';
 import WeatherInputCard from './components/WeatherInputCard';
-
-interface WeatherData {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  current: Record<string, any>;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  location: Record<string, any>;
-}
+import type { WeatherResponse } from './services/responseTypes';
 
 const App: React.FC = () => {
-  const [weather, setWeather] = useState<WeatherData | null>(null);
+  const [weather, setWeather] = useState<WeatherResponse | null>(null);
+  const [currWeatherSummary, setCurrWeatherSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const getWeather = async () => {
       try {
-        const data = await fetchWeatherData();
-        setWeather(data);
+        const currentWeatherData = await fetchWeatherData();
+        setWeather(currentWeatherData);
+
+        const currentWeatherSummary = await fetchCurrentWeatherSummary();
+        setCurrWeatherSummary(currentWeatherSummary);
+
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (err: any) {
         setError(err.message);
@@ -34,6 +33,28 @@ const App: React.FC = () => {
     };
     getWeather();
   }, []);
+
+  function calculateAQI_PM25(pm25: number): number {
+    const breakpoints = [
+      { AQI_low: 0, AQI_high: 50, PM_low: 0.0, PM_high: 12.0 },
+      { AQI_low: 51, AQI_high: 100, PM_low: 12.1, PM_high: 35.4 },
+      { AQI_low: 101, AQI_high: 150, PM_low: 35.5, PM_high: 55.4 },
+      { AQI_low: 151, AQI_high: 200, PM_low: 55.5, PM_high: 150.4 },
+      { AQI_low: 201, AQI_high: 300, PM_low: 150.5, PM_high: 250.4 },
+      { AQI_low: 301, AQI_high: 400, PM_low: 250.5, PM_high: 350.4 },
+      { AQI_low: 401, AQI_high: 500, PM_low: 350.5, PM_high: 500.4 },
+    ];
+
+    for (const bp of breakpoints) {
+      if (pm25 >= bp.PM_low && pm25 <= bp.PM_high) {
+        const aqi =
+          ((bp.AQI_high - bp.AQI_low) / (bp.PM_high - bp.PM_low)) * (pm25 - bp.PM_low) + bp.AQI_low;
+        return Math.round(aqi);
+      }
+    }
+
+    return -1;
+  }
 
   return (
     <div className="weather-container">
@@ -93,18 +114,20 @@ const App: React.FC = () => {
                 }}
               >
                 <WeatherCard
-                  time="11:38 AM"
-                  temperature={82}
-                  temperatureUnit="F"
-                  condition="Mostly cloudy"
-                  feelsLike={91}
-                  summary="The skies will be mostly cloudy. The high will be 87° on this very humid day."
-                  airQuality={40}
-                  wind="4 mph"
-                  humidity={76}
-                  visibility="6.2 mi"
-                  pressure="29.83"
-                  dewPoint="74°"
+                  location={`${weather.location.name}, ${weather.location.country}.`}
+                  time={weather.location.localtime}
+                  temperature={weather.current.temp_c}
+                  temperatureUnit={'C'}
+                  condition={weather.current.condition.text}
+                  icon={weather.current.condition.icon}
+                  feelsLike={`${weather.current.feelslike_c} °`}
+                  summary={currWeatherSummary || ''}
+                  airQuality={calculateAQI_PM25(weather.current.air_quality.pm2_5)}
+                  wind={`${weather.current.wind_kph} kph`}
+                  humidity={weather.current.humidity}
+                  visibility={`${weather.current.vis_km} km`}
+                  pressure={`${weather.current.pressure_mb} mb`}
+                  dewPoint={`${weather.current.dewpoint_c} °`}
                 />
                 <WeatherInputCard />
               </div>

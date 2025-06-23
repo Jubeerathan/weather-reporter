@@ -13,14 +13,30 @@ import {
 import MapIcon from '@mui/icons-material/Map';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { futureWeather } from '../services/weatherApi';
+import type { FutureResponse } from '../services/responseTypes';
 
 const WeatherInputCard = () => {
   const [place, setPlace] = useState('');
   const [date, setDate] = useState('');
+  const [futureWeatherData, setFutureWeatherData] = useState<FutureResponse | null>(null);
 
   const handleSearch = () => {
     console.log('Searching weather for:', { place, date });
-    // add actual search logic here
+
+    if (place && date) {
+      futureWeather(place, date)
+        .then((data) => {
+          console.log('Weather data:', data);
+          setFutureWeatherData(data);
+          console.log('Future weather data:', futureWeatherData);
+        })
+        .catch((error) => {
+          console.error('Error fetching weather data:', error);
+        });
+    } else {
+      console.warn('Please enter both place and date');
+    }
   };
 
   return (

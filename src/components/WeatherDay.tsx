@@ -1,14 +1,9 @@
 import React, { memo } from 'react';
 import { Box, Typography } from '@mui/material';
 import WeatherHour from './WeatherHourCard';
+import type { ForecastDay } from '../services/responseTypes';
 
-interface WeatherDayProps {
-  date: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  hours: any[];
-}
-
-const WeatherDay: React.FC<WeatherDayProps> = memo(({ date, hours }) => {
+const WeatherDay: React.FC<ForecastDay> = memo(({ date, hour }) => {
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       weekday: 'long',
@@ -56,7 +51,7 @@ const WeatherDay: React.FC<WeatherDayProps> = memo(({ date, hours }) => {
           },
         }}
       >
-        {hours.map((hour, index) => (
+        {hour.map((hour, index) => (
           <WeatherHour
             key={`${hour.time_epoch}-${index}`}
             hour={new Date(hour.time).toLocaleTimeString([], {
