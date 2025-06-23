@@ -33,11 +33,27 @@ type Current record {
     int cloud;
     decimal feelslike_c;
     decimal feelslike_f;
+    decimal windchill_c;
+    decimal windchill_f;
+    decimal heatindex_c;
+    decimal heatindex_f;
+    decimal dewpoint_c;
+    decimal dewpoint_f;
     decimal vis_km;
     decimal vis_miles;
     decimal uv;
     decimal gust_mph;
     decimal gust_kph;
+    AirQuality air_quality?;
+};
+
+type AirQuality record {
+    decimal co;
+    decimal no2;
+    decimal o3;
+    decimal so2;
+    decimal pm2_5;
+    decimal pm10;
 };
 
 type Condition record {
