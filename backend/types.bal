@@ -242,3 +242,29 @@ type GeminiResponse record {
 type GeminiCandidate record {
     GeminiContent content;
 };
+
+type GeoCode record {
+    string place_id;
+    string licence;
+    string osm_type;
+    string osm_id;
+    string lat;
+    string lon;
+    string display_name;
+    Address address;
+    string[] boundingbox;
+};
+
+type Address record {
+    string restaurant?;
+    string road?;
+    string hamlet?;
+    string suburb?;
+    string village?;
+    string city?;
+    string state_district?;
+    string state?;
+    string postcode?;
+    string country?;
+    string country_code?;
+};

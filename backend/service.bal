@@ -2,9 +2,11 @@ import ballerina/http;
 
 configurable string openWeatherApiKey = ?;
 configurable string geminiApiKey = ?;
+configurable string locationIQApiKey = ?;
 
 final http:Client openWeatherClient = check new ("https://api.weatherapi.com/v1/");
 final http:Client geminiClient = check new ("https://generativelanguage.googleapis.com");
+final http:Client locationIQClient = check new ("https://us1.locationiq.com/v1/");
 
 // For the local Development, uncomment the below code to enable CORS
 // @http:ServiceConfig {
@@ -73,6 +75,17 @@ service / on new http:Listener(9090) {
             q = city,
             dt = date,
             key = openWeatherApiKey
+        );
+        return response;
+    }
+
+    resource function get reverseGeocode(float lat, float lon) returns GeoCode|error {
+        GeoCode response = check locationIQClient->/reverse(
+            path = "",
+            key = locationIQApiKey,
+            lat = lat.toString(),
+            lon = lon.toString(),
+            format = "json"
         );
         return response;
     }
