@@ -244,3 +244,29 @@ export interface GeminiContent {
 export interface GeminiPart {
   text: string;
 }
+
+export interface GeoCode {
+  place_id: string;
+  licence: string;
+  osm_type: string;
+  osm_id: string;
+  lat: string;
+  lon: string;
+  display_name: string;
+  address: Address;
+  boundingbox: string[];
+}
+
+export interface Address {
+  restaurant?: string;
+  road?: string;
+  hamlet?: string;
+  suburb?: string;
+  village?: string;
+  city?: string;
+  state_district?: string;
+  state?: string;
+  postcode?: string;
+  country?: string;
+  country_code?: string;
+}
