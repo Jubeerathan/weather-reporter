@@ -5,7 +5,7 @@ import OpacityIcon from '@mui/icons-material/Opacity';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import CompressIcon from '@mui/icons-material/Compress';
 import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import FiberMannualRecordIcon from '@mui/icons-material/FiberManualRecord';
 
 interface WeatherCardProps {
@@ -23,6 +23,7 @@ interface WeatherCardProps {
   visibility: string;
   pressure: string;
   dewPoint: string;
+  onRefresh: () => void;
 }
 
 const WeatherCard: React.FC<WeatherCardProps> = ({
@@ -40,6 +41,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
   visibility,
   pressure,
   dewPoint,
+  onRefresh,
 }) => (
   // <Card className="glass-effect"
   //   sx={{
@@ -72,11 +74,11 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
             {time}
           </Typography>
         </Box>
-        <Tooltip title="Change location or report incorrect weather">
+        <Tooltip title="Refresh">
           <Chip
-            icon={<InfoOutlinedIcon />}
+            icon={<RefreshIcon />}
             label="Seeing different weather?"
-            size="small"
+            size="medium"
             sx={{
               background: 'rgba(255,255,255,0.08)',
               color: '#fff',
@@ -84,6 +86,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
               cursor: 'pointer',
             }}
             clickable
+            onClick={onRefresh}
           />
         </Tooltip>
       </Box>

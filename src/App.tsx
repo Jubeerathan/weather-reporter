@@ -15,8 +15,7 @@ const App: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const getWeather = async () => {
+   const getWeather = async () => {
       try {
         const currentWeatherData = await fetchWeatherData();
         setWeather(currentWeatherData);
@@ -31,6 +30,8 @@ const App: React.FC = () => {
         setLoading(false);
       }
     };
+
+  useEffect(() => {
     getWeather();
   }, []);
 
@@ -128,6 +129,7 @@ const App: React.FC = () => {
                   visibility={`${weather.current.vis_km} km`}
                   pressure={`${weather.current.pressure_mb} mb`}
                   dewPoint={`${weather.current.dewpoint_c} °`}
+                  onRefresh={getWeather}
                 />
                 <WeatherInputCard />
               </div>
