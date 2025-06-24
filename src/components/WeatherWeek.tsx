@@ -1,14 +1,9 @@
-import React, { useState, useMemo, useCallback, useEffect } from 'react';
+import React, { useState, useMemo, useCallback, useEffect, useContext } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
 import WeatherDay from './WeatherDay';
 import type { ForecastDay, ForecastResponse } from '../services/responseTypes';
 import { fetchWeatherForecast } from '../services/weatherApi';
-
-// interface ForecastDay {
-//   date: string;
-//   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//   hour: any[];
-// }
+import { LocationContext } from '../context/LocationContext';
 
 interface FormattedDate {
   short: string;
@@ -18,18 +13,19 @@ interface FormattedDate {
 const WeatherWeek: React.FC = () => {
   const [weatherData, setWeatherData] = useState<ForecastResponse | null>(null);
   const [selectedTab, setSelectedTab] = useState(0);
+  const { location } = useContext(LocationContext);
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
-        const weatherData = await fetchWeatherForecast();
+        const weatherData = await fetchWeatherForecast(location.name ? location.name : 'Colombo');
         setWeatherData(weatherData);
       } catch (error) {
         console.error('Error fetching weather data:', error);
       }
     };
     fetchWeather();
-  }, []);
+  }, [location]);
 
   // Memoize forecast days and formatted dates
   const { forecastDays, formattedDates } = useMemo(() => {

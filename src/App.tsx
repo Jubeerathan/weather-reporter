@@ -8,19 +8,23 @@ import { Typography, CssBaseline, AppBar, Toolbar, Box, Container } from '@mui/m
 import WbSunnyRounded from '@mui/icons-material/WbSunnyRounded';
 import WeatherInputCard from './components/WeatherInputCard';
 import type { WeatherResponse } from './services/responseTypes';
+import { LocationContext } from './context/LocationContext';
 
 const App: React.FC = () => {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
   const [currWeatherSummary, setCurrWeatherSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { location } = React.useContext(LocationContext);
+
+  console.log('Current location from context:', location);
 
    const getWeather = async () => {
       try {
-        const currentWeatherData = await fetchWeatherData();
+        const currentWeatherData = await fetchWeatherData(location.name ? location.name : 'Colombo');
         setWeather(currentWeatherData);
 
-        const currentWeatherSummary = await fetchCurrentWeatherSummary();
+        const currentWeatherSummary = await fetchCurrentWeatherSummary(location.name ? location.name : 'Colombo');
         setCurrWeatherSummary(currentWeatherSummary);
 
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -33,7 +37,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     getWeather();
-  }, []);
+  }, [location]);
 
   function calculateAQI_PM25(pm25: number): number {
     const breakpoints = [

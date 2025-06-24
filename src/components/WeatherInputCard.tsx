@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
   Card,
   CardContent,
@@ -13,29 +13,45 @@ import {
 import MapIcon from '@mui/icons-material/Map';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import { futureWeather } from '../services/weatherApi';
-import type { FutureResponse } from '../services/responseTypes';
+import { fetchWeatherData } from '../services/weatherApi';
+import type { WeatherResponse } from '../services/responseTypes';
+import MapWithMarker from './MapWithMarker';
+import { LocationContext } from '../context/LocationContext';
+import { SnackbarContext } from '../context/SnackbarContext';
 
 const WeatherInputCard = () => {
+  const {location, setLocation} = useContext(LocationContext);
+  const { showMessage } = useContext(SnackbarContext);
   const [place, setPlace] = useState('');
-  const [date, setDate] = useState('');
-  const [futureWeatherData, setFutureWeatherData] = useState<FutureResponse | null>(null);
+  const [weatherData, setWeatherData] = useState<WeatherResponse | null>(null);
 
   const handleSearch = () => {
-    console.log('Searching weather for:', { place, date });
+    console.log('Searching weather for:', { place });
 
-    if (place && date) {
-      futureWeather(place, date)
+    if (place) {
+      fetchWeatherData(place)
         .then((data) => {
-          console.log('Weather data:', data);
-          setFutureWeatherData(data);
-          console.log('Future weather data:', futureWeatherData);
+          setWeatherData(data);
+          setLocation({
+            name: data.location.name,
+            lat: data.location.lat,
+            lon: data.location.lon,
+            region: data.location.region,
+            country: data.location.country,
+            tz_id: data.location.tz_id,
+            localtime_epoch: data.location.localtime_epoch,
+            localtime: data.location.localtime,
+          });
+          console.log('New location data:', location);
+          console.log('Future weather data:', weatherData);
         })
         .catch((error) => {
-          console.error('Error fetching weather data:', error);
+          showMessage(`Error: ${error.message}`, 'error');
+          console.error('Error fetching weather data:', error.message);
         });
     } else {
-      console.warn('Please enter both place and date');
+      showMessage('Please enter a place to search for weather', 'warning');
+      console.warn('Please enter both place');
     }
   };
 
@@ -53,58 +69,10 @@ const WeatherInputCard = () => {
       >
         <CardContent>
           <Grid container spacing={3}>
-            {/* Left: Mock Map */}
-            <Grid
-            // item xs={12} md={6}
-            >
-              <Box
-                sx={{
-                  position: 'relative',
-                  height: 320,
-                  borderRadius: 3,
-                  overflow: 'hidden',
-                  background:
-                    'linear-gradient(135deg, rgba(58,75,106,0.9) 0%, rgba(74,90,120,0.7) 100%)',
-                }}
-              >
-                <Box
-                  sx={{
-                    position: 'absolute',
-                    inset: 0,
-                    backgroundImage: `
-                      repeating-linear-gradient(0deg, transparent, transparent 15px, rgba(255,255,255,0.1) 16px),
-                      repeating-linear-gradient(90deg, transparent, transparent 15px, rgba(255,255,255,0.1) 16px)
-                    `,
-                    opacity: 0.2,
-                  }}
-                />
-                <Box
-                  position="absolute"
-                  top="50%"
-                  left="50%"
-                  sx={{ transform: 'translate(-50%, -50%)', textAlign: 'center', zIndex: 1 }}
-                >
-                  <MapIcon sx={{ fontSize: 56, opacity: 0.9 }} />
-                  <Typography variant="h6" mt={1}>
-                    Interactive Map
-                  </Typography>
-                  <Typography variant="body2" sx={{ opacity: 0.7 }}>
-                    Click to select location
-                  </Typography>
-                  <Box mt={2} display="flex" justifyContent="center" gap={2}>
-                    <Box sx={pulseDot('green')} />
-                    <Box sx={pulseDot('blue')} />
-                    <Box sx={pulseDot('yellow')} />
-                  </Box>
-                </Box>
-              </Box>
-            </Grid>
-
+            {/* Left: Mock Map */}  
+            {<MapWithMarker location={location} />}
             {/* Right: Form */}
             <Grid
-              // item
-              // xs={12}
-              // // md={6}
               sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3 }}
             >
               <TextField
@@ -127,33 +95,6 @@ const WeatherInputCard = () => {
                     },
                   },
                   inputLabel: {
-                    style: { color: 'white' },
-                  },
-                }}
-              />
-
-              <TextField
-                fullWidth
-                type="date"
-                variant="filled"
-                label="Select Date"
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <CalendarTodayIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                    sx: {
-                      backgroundColor: 'rgba(255,255,255,0.08)',
-                      borderRadius: 2,
-                      color: 'white',
-                    },
-                  },
-                  inputLabel: {
-                    shrink: true,
                     style: { color: 'white' },
                   },
                 }}
