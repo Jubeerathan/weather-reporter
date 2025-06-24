@@ -20,7 +20,7 @@ import { LocationContext } from '../context/LocationContext';
 import { SnackbarContext } from '../context/SnackbarContext';
 
 const WeatherInputCard = () => {
-  const {location, setLocation} = useContext(LocationContext);
+  const { location, setLocation } = useContext(LocationContext);
   const { showMessage } = useContext(SnackbarContext);
   const [place, setPlace] = useState('');
   const [weatherData, setWeatherData] = useState<WeatherResponse | null>(null);
@@ -69,7 +69,7 @@ const WeatherInputCard = () => {
       >
         <CardContent>
           <Grid container spacing={3}>
-            {/* Left: Mock Map */}  
+            {/* Left: Mock Map */}
             {<MapWithMarker location={location} />}
             {/* Right: Form */}
             <Grid
@@ -149,18 +149,5 @@ const WeatherInputCard = () => {
     </Box>
   );
 };
-
-const pulseDot = (color: string) => ({
-  width: 8,
-  height: 8,
-  borderRadius: '50%',
-  bgcolor: color,
-  animation: 'pulse 1.5s infinite',
-  '@keyframes pulse': {
-    '0%': { transform: 'scale(1)', opacity: 1 },
-    '50%': { transform: 'scale(1.5)', opacity: 0.5 },
-    '100%': { transform: 'scale(1)', opacity: 1 },
-  },
-});
 
 export default WeatherInputCard;

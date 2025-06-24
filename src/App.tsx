@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import WeatherCard from './components/WeatherCard';
 import LoadingSpinner from './components/LoadingSpinner';
 import ErrorMessage from './components/ErrorMessage';
@@ -9,34 +9,40 @@ import WbSunnyRounded from '@mui/icons-material/WbSunnyRounded';
 import WeatherInputCard from './components/WeatherInputCard';
 import type { WeatherResponse } from './services/responseTypes';
 import { LocationContext } from './context/LocationContext';
+import type { Location } from './services/responseTypes';
+import { defaultLocation } from './utils/constants';
 
 const App: React.FC = () => {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
   const [currWeatherSummary, setCurrWeatherSummary] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const { location } = React.useContext(LocationContext);
+  const { location } = useContext(LocationContext);
 
   console.log('Current location from context:', location);
 
-   const getWeather = async () => {
-      try {
-        const currentWeatherData = await fetchWeatherData(location.name ? location.name : 'Colombo');
-        setWeather(currentWeatherData);
+  const getWeather = async (location: Location) => {
+    try {
+      const currentWeatherData = await fetchWeatherData(
+        location.name ? location.name : defaultLocation.name,
+      );
+      setWeather(currentWeatherData);
 
-        const currentWeatherSummary = await fetchCurrentWeatherSummary(location.name ? location.name : 'Colombo');
-        setCurrWeatherSummary(currentWeatherSummary);
+      const currentWeatherSummary = await fetchCurrentWeatherSummary(
+        location.name ? location.name : defaultLocation.name,
+      );
+      setCurrWeatherSummary(currentWeatherSummary);
 
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    getWeather();
+    getWeather(location);
   }, [location]);
 
   function calculateAQI_PM25(pm25: number): number {
@@ -133,7 +139,7 @@ const App: React.FC = () => {
                   visibility={`${weather.current.vis_km} km`}
                   pressure={`${weather.current.pressure_mb} mb`}
                   dewPoint={`${weather.current.dewpoint_c} °`}
-                  onRefresh={getWeather}
+                  onRefresh={() => getWeather(location)}
                 />
                 <WeatherInputCard />
               </div>

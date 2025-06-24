@@ -11,7 +11,12 @@ export const fetchWeatherData = async (location = 'Colombo'): Promise<WeatherRes
     console.log('Weather data fetched successfully:', response.data);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response && error.response.data && error.response.data.error) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response &&
+      error.response.data &&
+      error.response.data.error
+    ) {
       throw new Error(error.response.data.error.message);
     }
     throw new Error(`Error fetching weather data: ${(error as Error).message}`);
@@ -24,7 +29,12 @@ export const fetchCurrentWeatherSummary = async (location = 'Colombo'): Promise<
     console.log('Weather summary fetched successfully:', response.data);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response && error.response.data && error.response.data.error) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response &&
+      error.response.data &&
+      error.response.data.error
+    ) {
       throw new Error(error.response.data.error.message);
     }
     throw new Error(`Error fetching weather summary: ${(error as Error).message}`);
@@ -42,7 +52,12 @@ export const fetchWeatherForecast = async (
     console.log('Weather forecast fetched successfully:', response.data);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response && error.response.data && error.response.data.error) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response &&
+      error.response.data &&
+      error.response.data.error
+    ) {
       throw new Error(error.response.data.error.message);
     }
     throw new Error(`Error fetching weather forecast: ${(error as Error).message}`);
@@ -57,7 +72,12 @@ export const futureWeather = async (location: string, date: string): Promise<Fut
     console.log('Future weather data fetched successfully:', response.data);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response && error.response.data && error.response.data.error) {
+    if (
+      axios.isAxiosError(error) &&
+      error.response &&
+      error.response.data &&
+      error.response.data.error
+    ) {
       throw new Error(error.response.data.error.message);
     }
     throw new Error(`Error fetching future weather data: ${(error as Error).message}`);
