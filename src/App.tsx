@@ -131,14 +131,14 @@ const App: React.FC = () => {
                   temperatureUnit={'C'}
                   condition={weather.current.condition.text}
                   icon={weather.current.condition.icon}
-                  feelsLike={`${weather.current.feelslike_c} °`}
+                  feelsLike={weather.current.feelslike_c}
                   summary={currWeatherSummary || ''}
                   airQuality={calculateAQI_PM25(weather.current.air_quality.pm2_5)}
                   wind={`${weather.current.wind_kph} kph`}
                   humidity={weather.current.humidity}
                   visibility={`${weather.current.vis_km} km`}
                   pressure={`${weather.current.pressure_mb} mb`}
-                  dewPoint={`${weather.current.dewpoint_c} °`}
+                  dewPoint={weather.current.dewpoint_c}
                   onRefresh={() => getWeather(location)}
                 />
                 <WeatherInputCard />

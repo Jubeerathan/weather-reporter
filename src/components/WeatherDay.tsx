@@ -60,15 +60,15 @@ const WeatherDay: React.FC<ForecastDay> = memo(({ date, hour }) => {
               hour12: true,
             })}
             icon={hour.condition.icon}
-            temp_f={hour.temp_f}
+            temp_c={hour.temp_c}
             condition={hour.condition.text}
-            feelslike_f={hour.feelslike_f}
+            feelslike_c={hour.feelslike_c}
             wind_mph={hour.wind_mph}
             cloud={hour.cloud}
             visibility={`${hour.vis_miles} mi`}
             gust_mph={hour.gust_mph}
             humidity={hour.humidity}
-            dewpoint_f={hour.dewpoint_f}
+            dewpoint_c={hour.dewpoint_c}
             pressure_in={hour.pressure_in}
             uv={hour.uv}
           />

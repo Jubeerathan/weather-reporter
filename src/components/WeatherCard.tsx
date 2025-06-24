@@ -15,14 +15,14 @@ interface WeatherCardProps {
   temperatureUnit?: 'F' | 'C';
   condition: string;
   icon: string;
-  feelsLike: string;
+  feelsLike: number;
   summary: string;
   airQuality: number;
   wind: string;
   humidity: number;
   visibility: string;
   pressure: string;
-  dewPoint: string;
+  dewPoint: number;
   onRefresh: () => void;
 }
 
@@ -30,7 +30,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
   location,
   time,
   temperature,
-  temperatureUnit = 'F',
+  temperatureUnit = 'C',
   condition,
   icon,
   feelsLike,
@@ -106,8 +106,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
           <Typography variant="body2" color="inherit">
             Feels like{' '}
             <b>
-              {feelsLike}
-              {temperatureUnit}
+              {feelsLike}°{temperatureUnit}
             </b>
           </Typography>
         </Box>
@@ -163,8 +162,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
           <Box display="flex" alignItems="center">
             <DeviceThermostatIcon sx={{ mr: 0.5 }} />
             <Typography variant="body2">
-              {dewPoint}
-              {temperatureUnit}
+              {dewPoint}°{temperatureUnit}
             </Typography>
           </Box>
         </Tooltip>

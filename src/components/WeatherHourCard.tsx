@@ -12,15 +12,15 @@ import GrainIcon from '@mui/icons-material/Grain';
 interface WeatherHourProps {
   hour: string;
   icon: string;
-  temp_f: number;
+  temp_c: number;
   condition: string;
-  feelslike_f: number;
+  feelslike_c: number;
   wind_mph: number;
   cloud: number;
   visibility: string;
   gust_mph: number;
   humidity: number;
-  dewpoint_f: number;
+  dewpoint_c: number;
   pressure_in: number;
   uv: number;
 }
@@ -28,15 +28,15 @@ interface WeatherHourProps {
 const WeatherHour: React.FC<WeatherHourProps> = ({
   hour,
   icon,
-  temp_f,
+  temp_c,
   condition,
-  feelslike_f,
+  feelslike_c,
   wind_mph,
   cloud,
   visibility,
   gust_mph,
   humidity,
-  dewpoint_f,
+  dewpoint_c,
   pressure_in,
   uv,
 }) => (
@@ -62,7 +62,7 @@ const WeatherHour: React.FC<WeatherHourProps> = ({
           style={{ marginRight: 8 }}
         />
         <Typography variant="h5" fontWeight={700} ml={1}>
-          {Math.round(temp_f)}°
+          {Math.round(temp_c)}°C
         </Typography>
       </Box>
       <Box
@@ -90,7 +90,7 @@ const WeatherHour: React.FC<WeatherHourProps> = ({
         <Tooltip title="Feels like">
           <Box display="flex" alignItems="center">
             <DeviceThermostatIcon fontSize="small" sx={{ mr: 0.5 }} />
-            <Typography variant="caption">{Math.round(feelslike_f)}°</Typography>
+            <Typography variant="caption">{Math.round(feelslike_c)}°C</Typography>
           </Box>
         </Tooltip>
         <Tooltip title="Wind">
@@ -126,7 +126,7 @@ const WeatherHour: React.FC<WeatherHourProps> = ({
         <Tooltip title="Dew point">
           <Box display="flex" alignItems="center">
             <DeviceThermostatIcon fontSize="small" sx={{ mr: 0.5 }} />
-            <Typography variant="caption">{Math.round(dewpoint_f)}°</Typography>
+            <Typography variant="caption">{Math.round(dewpoint_c)}°C</Typography>
           </Box>
         </Tooltip>
         <Tooltip title="Pressure">

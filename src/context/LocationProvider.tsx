@@ -44,6 +44,7 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
         'warning',
       );
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
