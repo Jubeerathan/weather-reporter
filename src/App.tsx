@@ -115,10 +115,11 @@ const App: React.FC = () => {
             <ErrorMessage message={error} />
           ) : weather ? (
             <>
-              <div
-                style={{
+              <Box
+                sx={{
                   width: '100%',
                   display: 'flex',
+                  flexDirection: { xs: 'column', md: 'row' },
                   alignItems: 'stretch',
                   gap: '2rem',
                   justifyContent: 'space-between',
@@ -142,7 +143,7 @@ const App: React.FC = () => {
                   onRefresh={() => getWeather(location)}
                 />
                 <WeatherInputCard />
-              </div>
+              </Box>
               <WeatherWeek />
             </>
           ) : null}

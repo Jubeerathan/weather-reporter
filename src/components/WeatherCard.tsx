@@ -43,75 +43,120 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
   dewPoint,
   onRefresh,
 }) => (
-  // <Card className="glass-effect"
-  //   sx={{
-  //     // background: "linear-gradient(135deg, #22304a 0%, #2d3956 100%)",
-  //     background: "linear-gradient(135deg, #3a4b6a 0%, #4a5a78 100%)",
-  //     color: "#fff",
-  //     borderRadius: 4,
-  //     p: 2,
-  //   }}
-  // >
   <Card
     sx={{
-      background: 'linear-gradient(135deg, rgba(58, 75, 106, 0.8) 0%, rgba(74, 90, 120, 0.5) 100%)',
+      background: 'linear-gradient(135deg, rgba(58, 75, 106, 0.8), rgba(74, 90, 120, 0.5))',
       color: '#fff',
-      borderRadius: 4,
-      p: 2,
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)', // for Safari support
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.2)',
+      borderRadius: 2,
+      p: { xs: 0.5, sm: 1 },
+      backdropFilter: 'blur(8px)',
+      border: '1px solid rgba(255, 255, 255, 0.08)',
+      width: '100%',
     }}
   >
     <CardContent>
-      <Box display="flex" justifyContent="space-between" alignItems="center" flexWrap={'wrap'}>
+      {/* Header: Location & Refresh */}
+      <Box
+        display="flex"
+        justifyContent="space-between"
+        alignItems="center"
+        flexDirection='row'
+        gap={1}
+      >
         <Box>
-          <Typography variant="subtitle2" color="inherit">
-            Weather on {location}
-          </Typography>
-          <Typography variant="caption" color="inherit">
-            {time}
-          </Typography>
+          <Typography variant="subtitle2">Weather on {location}</Typography>
+          <Typography variant="caption">{time}</Typography>
         </Box>
         <Tooltip title="Refresh">
           <Chip
             icon={<RefreshIcon />}
-            label="Seeing different weather?"
-            size="medium"
+            label="Refresh"
+            size="small"
             sx={{
               background: 'rgba(255,255,255,0.08)',
               color: '#fff',
               fontWeight: 500,
-              cursor: 'pointer',
             }}
             clickable
             onClick={onRefresh}
           />
         </Tooltip>
       </Box>
-      <Box display="flex" alignItems="center" mt={2}>
-        {/* <WbCloudyIcon sx={{ fontSize: 56, mr: 2 }} /> */}
-        <img src={icon} alt={condition} style={{ width: 64, height: 64, marginRight: 12 }} />
-        <Typography variant="h2" fontWeight={700} sx={{ mr: 1 }}>
-          {temperature}
-        </Typography>
-        <Typography variant="h3" fontWeight={400} sx={{ mr: 2 }}>
-          °{temperatureUnit}
-        </Typography>
+
+      {/* Main Weather Info */}
+      <Box
+        display="flex"
+        alignItems="center"
+        flexDirection='row'
+        mt={3}
+        gap={2}
+      >
+        <img
+          src={icon}
+          alt={condition}
+          style={{
+        width: '48px',
+        height: '48px',
+          }}
+          srcSet={`
+        ${icon} 1x,
+        ${icon} 2x
+          `}
+          sizes="(max-width:600px) 40px, 56px"
+          // Responsive size via sx for MUI v5+
+          // If you want to use sx prop instead of style:
+          // sx={{ width: { xs: 40, sm: 56 }, height: { xs: 40, sm: 56 } }}
+        />
+        <Box
+          display="flex"
+          alignItems="flex-end"
+          sx={{
+            mr: { xs: 0, sm: 1 },
+            mb: { xs: 0.5, sm: 0 },
+          }}
+        >
+          <Typography
+            variant="h3"
+            fontWeight={700}
+            sx={{
+              mr: 0,
+              fontSize: { xs: '2.5rem', sm: '3rem', md: '3.5rem' },
+              lineHeight: 1,
+            }}
+          >
+            {temperature}
+          </Typography>
+          <Typography
+            variant="h4"
+            sx={{
+              fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+              lineHeight: 1.2,
+            }}
+          >
+            °{temperatureUnit}
+          </Typography>
+        </Box>
         <Box>
           <Typography variant="h6" fontWeight={600}>
-            {condition}
+        {condition}
           </Typography>
-          <Typography variant="body2" color="inherit">
-            Feels like{' '}
-            <b>
-              {feelsLike}°{temperatureUnit}
-            </b>
+          <Typography variant="body2">
+        Feels like{' '}
+        <b>
+          {feelsLike}°{temperatureUnit}
+        </b>
           </Typography>
         </Box>
       </Box>
-      <Stack direction="row" spacing={3} mt={2} justifyContent="flex-start">
+
+      {/* Extra Metrics */}
+      <Stack
+        direction="row"
+        spacing={2}
+        mt={3}
+        flexWrap="wrap"
+        justifyContent={{ xs: 'center', sm: 'flex-start' }}
+      >
         <Tooltip title="Air quality index (lower is better)">
           <Box display="flex" alignItems="center">
             <FiberMannualRecordIcon
@@ -119,16 +164,17 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
                 mr: 0.5,
                 color:
                   airQuality <= 50
-                    ? '#4caf50' // Good (Green)
+                    ? '#4caf50'
                     : airQuality <= 100
-                      ? '#ffeb3b' // Moderate (Yellow)
+                      ? '#ffeb3b'
                       : airQuality <= 150
-                        ? '#ff9800' // Unhealthy for Sensitive Groups (Orange)
+                        ? '#ff9800'
                         : airQuality <= 200
-                          ? '#f44336' // Unhealthy (Red)
+                          ? '#f44336'
                           : airQuality <= 300
-                            ? '#8e24aa' // Very Unhealthy (Purple)
-                            : '#795548', // Hazardous (Brown)
+                            ? '#8e24aa'
+                            : '#795548',
+                fontSize: '1.2rem',
               }}
             />
             <Typography variant="body2">{airQuality}</Typography>
@@ -136,45 +182,47 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
         </Tooltip>
         <Tooltip title="Wind speed and direction">
           <Box display="flex" alignItems="center">
-            <AirIcon sx={{ mr: 0.5 }} />
+            <AirIcon sx={{ mr: 0.5 , fontSize:'1.2rem'}} />
             <Typography variant="body2">{wind}</Typography>
           </Box>
         </Tooltip>
-        <Tooltip title="Relative humidity">
+        <Tooltip title="Humidity">
           <Box display="flex" alignItems="center">
-            <OpacityIcon sx={{ mr: 0.5 }} />
+            <OpacityIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
             <Typography variant="body2">{humidity}%</Typography>
           </Box>
         </Tooltip>
-        <Tooltip title="Visibility distance">
+        <Tooltip title="Visibility">
           <Box display="flex" alignItems="center">
-            <VisibilityIcon sx={{ mr: 0.5 }} />
+            <VisibilityIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
             <Typography variant="body2">{visibility}</Typography>
           </Box>
         </Tooltip>
-        <Tooltip title="Atmospheric pressure">
+        <Tooltip title="Pressure">
           <Box display="flex" alignItems="center">
-            <CompressIcon sx={{ mr: 0.5 }} />
+            <CompressIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
             <Typography variant="body2">{pressure}</Typography>
           </Box>
         </Tooltip>
-        <Tooltip title="Dew point temperature">
+        <Tooltip title="Dew point">
           <Box display="flex" alignItems="center">
-            <DeviceThermostatIcon sx={{ mr: 0.5 }} />
+            <DeviceThermostatIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
             <Typography variant="body2">
               {dewPoint}°{temperatureUnit}
             </Typography>
           </Box>
         </Tooltip>
       </Stack>
+
+      {/* Weather Summary */}
       <Typography
-        variant="body1"
-        color="inherit"
-        mt={2}
-        mb={2}
-        mr={0.5}
-        ml={0.5}
-        sx={{ textAlign: 'justify', lineHeight: 1.4, fontSize: '0.90rem' }}
+        variant="body2"
+        mt={3}
+        sx={{
+          textAlign: 'justify',
+          fontSize: { xs: '0.85rem', sm: '0.9rem' },
+          lineHeight: 1.5,
+        }}
       >
         {summary}
       </Typography>

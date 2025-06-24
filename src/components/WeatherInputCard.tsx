@@ -56,7 +56,7 @@ const WeatherInputCard = () => {
   };
 
   return (
-    <Box>
+    <Box sx={{width: '100%'}}>
       <Card
         sx={{
           p: 4,
@@ -70,9 +70,23 @@ const WeatherInputCard = () => {
         <CardContent>
           <Grid container spacing={3}>
             {/* Left: Mock Map */}
-            {<MapWithMarker location={location} />}
+            <Grid size={{ xs: 12, md: 6 }}>
+              <Box
+                sx={{
+                  position: 'relative',
+                  height: 320,
+                  borderRadius: 3,
+                  overflow: 'hidden',
+                  background:
+                    'linear-gradient(135deg, rgba(58,75,106,0.9) 0%, rgba(74,90,120,0.7) 100%)',
+                }}
+              >
+                {<MapWithMarker location={location} />}
+              </Box>
+            </Grid>
             {/* Right: Form */}
             <Grid
+              size={{ xs: 12, md: 6 }}
               sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3 }}
             >
               <TextField
