@@ -4,9 +4,21 @@ configurable string openWeatherApiKey = ?;
 configurable string geminiApiKey = ?;
 configurable string locationIQApiKey = ?;
 
-final http:Client openWeatherClient = check new ("https://api.weatherapi.com/v1/");
-final http:Client geminiClient = check new ("https://generativelanguage.googleapis.com");
-final http:Client locationIQClient = check new ("https://us1.locationiq.com/v1/");
+final http:Client openWeatherClient = check initializeOpenWeatherClient();
+final http:Client geminiClient = check initializeGeminiClient();
+final http:Client locationIQClient = check initializeLocationIQClient();
+
+function initializeOpenWeatherClient() returns http:Client|error {
+    return new ("https://api.weatherapi.com/v1/");
+}
+
+function initializeGeminiClient() returns http:Client|error {
+    return new ("https://generativelanguage.googleapis.com");
+}
+
+function initializeLocationIQClient() returns http:Client|error {
+    return new ("https://us1.locationiq.com/v1/");
+}
 
 // For the local Development, uncomment the below code to enable CORS
 // @http:ServiceConfig {
@@ -119,7 +131,7 @@ service / on new http:Listener(9090) {
 
     resource function get currentWeatherSummary(string city) returns string|error {
         // Get current weather data
-        json curentweatherRes = check openWeatherClient->/current\.json(
+        WeatherResponse currentWeatherRes = check openWeatherClient->/current\.json(
             path = "",
             headers = {},
             q = city,
@@ -130,7 +142,7 @@ service / on new http:Listener(9090) {
                 {
                     parts: [
                         {
-                            text: string `You're a weather expert. Generate a brief, natural language summary (1-2 sentences) that highlights comfort, weather conditions, wind, air quality, and ends with a useful suggestion or reminder for the user. Make it easy to understand for a general audience. ${curentweatherRes.toJsonString()}`
+                            text: string `You're a weather expert. Generate a brief, natural language summary (1-2 sentences) that highlights comfort, weather conditions, wind, air quality, and ends with a useful suggestion or reminder for the user. Make it easy to understand for a general audience. ${currentWeatherRes.toJsonString()}`
                         }
                     ]
                 }

@@ -1,210 +1,85 @@
-import ballerina/test;
+import ballerina/data.jsondata;
 import ballerina/http;
+import ballerina/io;
+import ballerina/test;
 
-// @test:Mock {
-//     moduleName: "ballerina/http",
-//     functionName: "createClient"
-// }
-// function mockCreateClient(string url, *http:ClientConfiguration config) returns http:Client|error {
-//     return new MockWeatherClient();
-// }
+@test:Mock {functionName: "initializeOpenWeatherClient"}
+function mockInitializeOpenWeatherClient() returns http:Client|error {
+    http:Client mockClient = test:mock(http:Client);
+    json jsonResponse = check io:fileReadJson("./backend/tests/resources/astro-res.json");
+    AstronomyResponse astronomyResponse = check jsondata:parseAsType(jsonResponse);
+    test:prepare(mockClient)
+        .whenResource("::pathparam")
+        .withPathParameters({pathparam: ["astronomy.json"]})
+        .onMethod("get")
+        .thenReturn(astronomyResponse);
+    jsonResponse = check io:fileReadJson("./backend/tests/resources/weather-res.json");
+    WeatherResponse weatherResponse = check jsondata:parseAsType(jsonResponse);
+    test:prepare(mockClient)
+        .whenResource("::pathparam")
+        .withPathParameters({pathparam: ["current.json"]})
+        .onMethod("get")
+        .thenReturn(weatherResponse);
+    jsonResponse = check io:fileReadJson("./backend/tests/resources/forecast-res.json");
+    ForecastResponse forecastResponse = check jsondata:parseAsType(jsonResponse);
+    test:prepare(mockClient)
+        .whenResource("::pathparam")
+        .withPathParameters({pathparam: ["forecast.json"]})
+        .onMethod("get")
+        .thenReturn(forecastResponse);
+    jsonResponse = check io:fileReadJson("./backend/tests/resources/future-res.json");
+    FutureResponse futureResponse = check jsondata:parseAsType(jsonResponse);
+    test:prepare(mockClient)
+        .whenResource("::pathparam")
+        .withPathParameters({pathparam: ["future.json"]})
+        .onMethod("get")
+        .thenReturn(futureResponse);
+    jsonResponse = check io:fileReadJson("./backend/tests/resources/marine-res.json");
+    MarineResponse marineResponse = check jsondata:parseAsType(jsonResponse);
+    test:prepare(mockClient)
+        .whenResource("::pathparam")
+        .withPathParameters({pathparam: ["marine.json"]})
+        .onMethod("get")
+        .thenReturn(marineResponse);
+    return mockClient;
+}
 
-isolated client class MockWeatherClient {
-    remote isolated function get(string path, map<string|string[]>? headers = (), string? targetType = (), http:TargetType target = http:Response) returns http:Response|anydata|http:ClientError {
-        if path.includes("/current.json") {
-            json payload = {
-                "location": {
-                    "name": "London",
-                    "region": "City of London, Greater London",
-                    "country": "United Kingdom",
-                    "lat": 51.52,
-                    "lon": -0.11,
-                    "tz_id": "Europe/London",
-                    "localtime_epoch": 1687123456,
-                    "localtime": "2023-06-19 12:30"
-                },
-                "current": {
-                    "last_updated_epoch": 1687123400,
-                    "last_updated": "2023-06-19 12:30",
-                    "temp_c": 22.0,
-                    "temp_f": 71.6,
-                    "is_day": 1,
-                    "condition": {
-                        "text": "Partly cloudy",
-                        "icon": "//cdn.weatherapi.com/weather/64x64/day/116.png",
-                        "code": 116
-                    },
-                    "wind_mph": 8.1,
-                    "wind_kph": 13.0,
-                    "wind_degree": 220,
-                    "wind_dir": "SW",
-                    "pressure_mb": 1015.0,
-                    "pressure_in": 29.97,
-                    "precip_mm": 0.0,
-                    "precip_in": 0.0,
-                    "humidity": 65,
-                    "cloud": 25,
-                    "feelslike_c": 24.4,
-                    "feelslike_f": 75.9,
-                    "vis_km": 10.0,
-                    "vis_miles": 6.0,
-                    "uv": 5.0,
-                    "gust_mph": 10.5,
-                    "gust_kph": 16.9
-                }
-            };
-            return payload;
-        } else if path.includes("/forecast.json") {
-            json payload = {
-                "location": {
-                    "name": "London",
-                    "region": "City of London, Greater London",
-                    "country": "United Kingdom",
-                    "lat": 51.52,
-                    "lon": -0.11,
-                    "tz_id": "Europe/London",
-                    "localtime_epoch": 1687123456,
-                    "localtime": "2023-06-19 12:30"
-                },
-                "current": {
-                    "last_updated_epoch": 1687123400,
-                    "last_updated": "2023-06-19 12:30",
-                    "temp_c": 22.0,
-                    "temp_f": 71.6,
-                    "is_day": 1,
-                    "condition": {
-                        "text": "Partly cloudy",
-                        "icon": "//cdn.weatherapi.com/weather/64x64/day/116.png",
-                        "code": 116
-                    },
-                    "wind_mph": 8.1,
-                    "wind_kph": 13.0,
-                    "wind_degree": 220,
-                    "wind_dir": "SW",
-                    "pressure_mb": 1015.0,
-                    "pressure_in": 29.97,
-                    "precip_mm": 0.0,
-                    "precip_in": 0.0,
-                    "humidity": 65,
-                    "cloud": 25,
-                    "feelslike_c": 24.4,
-                    "feelslike_f": 75.9,
-                    "vis_km": 10.0,
-                    "vis_miles": 6.0,
-                    "uv": 5.0,
-                    "gust_mph": 10.5,
-                    "gust_kph": 16.9
-                },
-                "forecast": {
-                    "forecastday": [
+@test:Mock {functionName: "initializeGeminiClient"}
+function mockInitializeGeminiClient() returns http:Client|error {
+    http:Client mockClient = test:mock(http:Client);
+    GeminiResponse geminiResponse = {
+        "candidates": [
+            {
+                "content": {
+                    "parts": [
                         {
-                            "date": "2023-06-19",
-                            "date_epoch": 1687123456,
-                            "day": {
-                                "maxtemp_c": 25.0,
-                                "maxtemp_f": 77.0,
-                                "mintemp_c": 15.0,
-                                "mintemp_f": 59.0,
-                                "avgtemp_c": 20.0,
-                                "avgtemp_f": 68.0,
-                                "maxwind_mph": 12.0,
-                                "maxwind_kph": 19.3,
-                                "totalprecip_mm": 0.0,
-                                "totalprecip_in": 0.0,
-                                "totalsnow_cm": 0.0,
-                                "avgvis_km": 10.0,
-                                "avgvis_miles": 6.0,
-                                "avghumidity": 65,
-                                "daily_will_it_rain": 0,
-                                "daily_chance_of_rain": 0,
-                                "daily_will_it_snow": 0,
-                                "daily_chance_of_snow": 0,
-                                "condition": {
-                                    "text": "Sunny",
-                                    "icon": "//cdn.weatherapi.com/weather/64x64/day/113.png",
-                                    "code": 1000
-                                },
-                                "uv": 5.0
-                            },
-                            "astro": {
-                                "sunrise": "04:43 AM",
-                                "sunset": "09:21 PM",
-                                "moonrise": "05:12 AM",
-                                "moonset": "10:45 PM",
-                                "moon_phase": "Waxing Crescent",
-                                "moon_illumination": "35",
-                                "is_moon_up": 0,
-                                "is_sun_up": 1
-                            },
-                            "hour": []
+                            "text": "Take an umbrella with you when you go out in London today, as it is expected to rain."
                         }
                     ]
                 }
-            };
-            return payload;
-        } else if path.includes("/future.json") {
-            json payload = {
-                "location": {
-                    "name": "London",
-                    "region": "City of London, Greater London",
-                    "country": "United Kingdom",
-                    "lat": 51.52,
-                    "lon": -0.11,
-                    "tz_id": "Europe/London",
-                    "localtime_epoch": 1687123456,
-                    "localtime": "2023-06-19 12:30"
-                },
-                "forecast": {
-                    "forecastday": []
-                }
-            };
-            return payload;
-        } else if path.includes("/marine.json") {
-            json payload = {
-                "location": {
-                    "name": "London",
-                    "region": "City of London, Greater London",
-                    "country": "United Kingdom",
-                    "lat": 51.52,
-                    "lon": -0.11,
-                    "tz_id": "Europe/London",
-                    "localtime_epoch": 1687123456,
-                    "localtime": "2023-06-19 12:30"
-                },
-                "forecast": {
-                    "forecastday": []
-                }
-            };
-            return payload;
-        } else if path.includes("/astronomy.json") {
-            json payload = {
-                "location": {
-                    "name": "London",
-                    "region": "City of London, Greater London",
-                    "country": "United Kingdom",
-                    "lat": 51.52,
-                    "lon": -0.11,
-                    "tz_id": "Europe/London",
-                    "localtime_epoch": 1687123456,
-                    "localtime": "2023-06-19 12:30"
-                },
-                "astronomy": {
-                    "astro": {
-                        "sunrise": "04:43 AM",
-                        "sunset": "09:21 PM",
-                        "moonrise": "05:12 AM",
-                        "moonset": "10:45 PM",
-                        "moon_phase": "Waxing Crescent",
-                        "moon_illumination": "35",
-                        "is_moon_up": 0,
-                        "is_sun_up": 1
-                    }
-                }
-            };
-            return payload;
-        }
-        return error http:ClientError("Unsupported path");
-    }
+            }
+        ]
+    };
+
+    test:prepare(mockClient)
+        .whenResource("::pathparam")
+        .withPathParameters({pathparam: ["v1beta", "models", "gemini-2.0-flash:generateContent"]})
+        .onMethod("post")
+        .thenReturn(geminiResponse);
+    return mockClient;
+}
+
+@test:Mock {functionName: "initializeLocationIQClient"}
+function mockInitializeLocationIQClient() returns http:Client|error {
+    http:Client mockClient = test:mock(http:Client);
+    json jsonResponse = check io:fileReadJson("./backend/tests/resources/geo-res.json");
+    GeoCode geoCodeResponse = check jsondata:parseAsType(jsonResponse);
+    test:prepare(mockClient)
+        .whenResource("::pathparam")
+        .withPathParameters({pathparam: ["reverse"]})
+        .onMethod("get")
+        .thenReturn(geoCodeResponse);
+    return mockClient;
 }
 
 @test:Config {}
@@ -212,7 +87,7 @@ function testCurrentWeather() returns error? {
     http:Client testClient = check new ("http://localhost:9090");
     WeatherResponse response = check testClient->/currentWeather(city = "London");
     test:assertEquals(response.location.name, "London");
-    test:assertEquals(response.current.temp_c, 22.0d);
+    test:assertEquals(response.current.temp_c, 18.5d);
 }
 
 @test:Config {}
@@ -220,7 +95,7 @@ function testForecast() returns error? {
     http:Client testClient = check new ("http://localhost:9090");
     ForecastResponse response = check testClient->/forecast(city = "London", days = 1);
     test:assertEquals(response.location.name, "London");
-    test:assertEquals(response.forecast.forecastday[0].day.maxtemp_c, 25.0d);
+    test:assertEquals(response.forecast.forecastday[0].day.maxtemp_c, 30.0d);
 }
 
 @test:Config {}
@@ -243,4 +118,20 @@ function testAstronomy() returns error? {
     AstronomyResponse response = check testClient->/astronomy(city = "London", date = "2023-06-19");
     test:assertEquals(response.location.name, "London");
     test:assertEquals(response.astronomy.astro.sunrise, "04:43 AM");
+}
+
+@test:Config {}
+function testCurrentWeatherSummary() returns error? {
+    http:Client testClient = check new ("http://localhost:9090");
+    string response = check testClient->/currentWeatherSummary(city = "London");
+    test:assertEquals(response, "Take an umbrella with you when you go out in London today, as it is expected to rain.");
+}
+
+@test:Config {}
+function testReverseGeocode() returns error? {
+    http:Client testClient = check new ("http://localhost:9090");
+    GeoCode response = check testClient->/reverseGeocode(lat = 6.9321557, lon = 79.8479562);
+    test:assertEquals(response.lat, "6.9321557");
+    test:assertEquals(response.lon, "79.8479562");
+    test:assertEquals(response.address.state_district, "Colombo District");
 }
