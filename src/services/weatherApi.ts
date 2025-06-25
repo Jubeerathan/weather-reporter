@@ -7,7 +7,7 @@ const BASE_URL = import.meta.env.VITE_BACKEND_CHOREO_URL;
 
 export const fetchWeatherData = async (location = 'Colombo'): Promise<WeatherResponse> => {
   try {
-    const response = await axios.get<WeatherResponse>(`${BASE_URL}currentWeather?city=${location}`);
+    const response = await axios.get<WeatherResponse>(`${BASE_URL}currentWeather?city=${encodeURIComponent(location)}`);
     console.log('Weather data fetched successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -25,7 +25,7 @@ export const fetchWeatherData = async (location = 'Colombo'): Promise<WeatherRes
 
 export const fetchCurrentWeatherSummary = async (location = 'Colombo'): Promise<string> => {
   try {
-    const response = await axios.get<string>(`${BASE_URL}currentWeatherSummary?city=${location}`);
+    const response = await axios.get<string>(`${BASE_URL}currentWeatherSummary?city=${encodeURIComponent(location)}`);
     console.log('Weather summary fetched successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -47,7 +47,7 @@ export const fetchWeatherForecast = async (
 ): Promise<ForecastResponse> => {
   try {
     const response = await axios.get<ForecastResponse>(
-      `${BASE_URL}forecast?city=${location}&days=${days}`,
+      `${BASE_URL}forecast?city=${encodeURIComponent(location)}&days=${encodeURIComponent(days)}`,
     );
     console.log('Weather forecast fetched successfully:', response.data);
     return response.data;
@@ -67,7 +67,7 @@ export const fetchWeatherForecast = async (
 export const futureWeather = async (location: string, date: string): Promise<FutureResponse> => {
   try {
     const response = await axios.get<FutureResponse>(
-      `${BASE_URL}futureWeather?city=${location}&date=${date}`,
+      `${BASE_URL}futureWeather?city=${encodeURIComponent(location)}&date=${encodeURIComponent(date)}`,
     );
     console.log('Future weather data fetched successfully:', response.data);
     return response.data;

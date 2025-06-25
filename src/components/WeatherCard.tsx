@@ -33,7 +33,7 @@ const WeatherCard: React.FC = () => {
   const getWeather = async (location: Location) => {
     try {
       const currentWeatherData = await fetchWeatherData(
-        location.name ? location.name : defaultLocation.name,
+        location.name ? `${location.name}, ${location.country}` : `${defaultLocation.name}, ${defaultLocation.country}`,
       );
       setWeather(currentWeatherData);
       setRefreshingWeather(false);
@@ -54,7 +54,7 @@ const WeatherCard: React.FC = () => {
   const getCurrentSummary = async (location: Location) => {
     try {
       const currentWeatherSummary = await fetchCurrentWeatherSummary(
-        location.name ? location.name : defaultLocation.name,
+        location.name ? `${location.name}, ${location.country}` : `${defaultLocation.name}, ${defaultLocation.country}`,
       );
       setCurrWeatherSummary(currentWeatherSummary);
     } catch (err) {
@@ -600,6 +600,7 @@ const WeatherCard: React.FC = () => {
             />
           </Box>
         ) : (
+          <>
           <Typography
             variant="body2"
             mt={3}
@@ -611,6 +612,20 @@ const WeatherCard: React.FC = () => {
           >
             {currWeatherSummary}
           </Typography>
+          <Typography
+          variant="body2"
+            mt={3}
+            sx={{
+              textAlign: 'justify',
+              fontSize: { xs: '0.75rem', sm: '0.8rem' },
+              lineHeight: 1.5,
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontStyle: 'italic',
+              marginTop: '1rem'
+            }}>
+            AI insights - AI can make mistakes.
+          </Typography>
+          </>
         )}
       </CardContent>
     </Card>

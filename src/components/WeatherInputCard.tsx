@@ -29,11 +29,11 @@ interface GeoCodeOption {
 const WeatherInputCard = () => {
   const { location, setLocation } = useContext(LocationContext);
   const { showMessage } = useContext(SnackbarContext);
-  const [place, setPlace] = useState('');
+  const [place, setPlace] = useState<string>('');
   const [weatherData, setWeatherData] = useState<WeatherResponse | null>(null);
   const [geoCodeOptions, setGeoCodeOptions] = useState<GeoCodeOption[] | null>(null);
 
-  const handleSearch = () => {
+  const handleSearch = (place:string) => {
     console.log('Searching weather for:', { place });
 
     if (place) {
@@ -137,16 +137,17 @@ const WeatherInputCard = () => {
                     setGeoCodeOptions(null);
                     return;
                   }
-                  if (newValue && typeof newValue === 'object') {
+                  else if (newValue && typeof newValue === 'object') {
+                    console.log('Selected GeoCode:', newValue.value);
                     setPlace(newValue.value);
+                    handleSearch(newValue.value);
                   } else {
-                    setPlace(newValue as string);
+                    console.log('Selected GeoCode:', newValue);
+                    setPlace(newValue);
+                    handleSearch(newValue);
                   }
-                  handleSearch();
                 }}
                 onInputChange={(_event, newInputValue) => {
-                  _event.preventDefault();
-                  setPlace(newInputValue);
                   handleGeoCodeAutoComplete(newInputValue);
                 }}
                 renderInput={(params) => (
@@ -209,7 +210,7 @@ const WeatherInputCard = () => {
                 fullWidth
                 variant="contained"
                 startIcon={<SearchIcon />}
-                onClick={handleSearch}
+                onClick={()=>{handleSearch(place)}}
                 sx={{
                   py: 1.5,
                   fontWeight: 'bold',
