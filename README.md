@@ -1,54 +1,98 @@
-# React + TypeScript + Vite
+# Weather-Reporter
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Weather-Reporter is a comprehensive web application that provides real-time weather data with AI-powered insights using Gemini. The application features an interactive map interface, geolocation support, and 7-day forecasts to help users stay informed about current and upcoming weather conditions worldwide.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+The Weather-Reporter application offers a comprehensive set of features including, but not limitted to:
 
-## Expanding the ESLint configuration
+- 🔄 **Automatic Weather Updates**: Refreshes weather data every 5 minutes to ensure you have the most current information.
+- ⚡ **Real-Time Weather Data**: Provides up-to-the-minute weather conditions for your selected location.
+- 🤖 **AI-Powered Insights**: Leverages Gemini AI to offer context-aware analysis and interpretation of current weather conditions.
+- 📍 **Geolocation Support**: Automatically detects your location to provide relevant weather information without manual input.
+- 📅 **7-Day Forecast**: Shows detailed weather predictions for the upcoming week to help you plan ahead.
+- 🗺️ **Interactive Map Interface**: Visualizes your selected location on a map, making it easy to confirm the exact area for which weather data is being displayed.
+- 🌎 **Global Coverage**: Access weather information for locations worldwide with comprehensive international support.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## 🚀 Getting Started
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-});
+### 📋 Prerequisite
+
+Following software prerequisites need to be installed on your machine
+
+- NPM (Node Package Manager) - `v10.7.0`
+- [Node.js](https://nodejs.org/) - `v20.15.1`
+- [Ballerina](https://ballerina.io/downloads/) - `v2201.12.7`
+
+### 🖥️ Build the Frontend
+
+Before running the frontend service, Create a file named `.env` with the following configurations.
+
+```env
+VITE_BACKEND_CHOREO_URL=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+VITE_LOCATIONIQ_API_URL=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+VITE_LOCATIONIQ_API_KEY=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+#### 📦 Install Dependencies
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x';
-import reactDom from 'eslint-plugin-react-dom';
+```bash
+npm install
+```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-});
+#### ▶️ Up the Frontend Application
+
+```bash
+npm run dev
+```
+
+#### 🧪 Run the Tests
+
+```bash
+npm run test
+```
+
+### ⚙️ Build the Backend
+
+#### 🏃 Run the Backend Service
+
+Before running the backend service, Create a file named `Config.toml` with the following configurations.
+
+```Toml
+openWeatherApiKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+geminiApiKey = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+locationIQApiKey= "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+```
+
+Then execute the below command
+
+```bash
+bal run ./backend
+```
+
+Note: Uncomment the following lines in the `./backend/service.bal` to avoid the CORS issues.
+
+```Ballerina
+// For the local Development, uncomment the below code to enable CORS
+// @http:ServiceConfig {
+//     cors: {
+//         allowOrigins: ["http://localhost:5173"],
+//         allowMethods: ["GET"]
+//     }
+// }
+
+service / on new http:Listener(9090) {
+  // For the local Development, uncomment the below code to enable CORS
+  // @http:ResourceConfig {
+  //     cors: {
+  //         allowOrigins: ["http://localhost:5173"],
+  //         allowMethods: ["GET"]
+  //     }
+  // }
+```
+
+#### 🧪 Run the Backend Tests
+
+```bash
+bal test ./backend
 ```
