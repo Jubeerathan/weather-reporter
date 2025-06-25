@@ -410,7 +410,7 @@ const WeatherCard: React.FC = () => {
           gap={1}
         >
           <Box>
-            <Typography variant="subtitle2">Weather on {weather?.location.name}</Typography>
+            <Typography variant="subtitle2">Weather on {`${weather?.location.name}, ${weather?.location.country}.`}</Typography>
             <Typography variant="caption">{weather?.location.localtime}</Typography>
           </Box>
           <Tooltip title="Refresh">

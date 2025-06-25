@@ -17,7 +17,7 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
           fetchGeoCode(position.coords.latitude.toString(), position.coords.longitude.toString())
             .then((geoData) => {
               setLocation({
-                name: geoData.address.city || defaultLocation.name,
+                name: geoData.address.village || geoData.address.city || defaultLocation.name,
                 lat: position.coords.latitude,
                 lon: position.coords.longitude,
                 region: geoData.address.state || defaultLocation.region,
@@ -26,6 +26,7 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
                 localtime_epoch: Math.floor(Date.now() / 1000),
                 localtime: new Date().toISOString(),
               });
+              console.log('Geolocation data fetched successfully:', location);
             })
             .catch((error) => {
               console.error('Error fetching geolocation data:', error);
