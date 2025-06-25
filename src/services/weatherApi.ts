@@ -7,7 +7,9 @@ const BASE_URL = import.meta.env.VITE_BACKEND_CHOREO_URL;
 
 export const fetchWeatherData = async (location = 'Colombo'): Promise<WeatherResponse> => {
   try {
-    const response = await axios.get<WeatherResponse>(`${BASE_URL}currentWeather?city=${encodeURIComponent(location)}`);
+    const response = await axios.get<WeatherResponse>(
+      `${BASE_URL}currentWeather?city=${encodeURIComponent(location)}`,
+    );
     console.log('Weather data fetched successfully:', response.data);
     return response.data;
   } catch (error) {
@@ -25,7 +27,9 @@ export const fetchWeatherData = async (location = 'Colombo'): Promise<WeatherRes
 
 export const fetchCurrentWeatherSummary = async (location = 'Colombo'): Promise<string> => {
   try {
-    const response = await axios.get<string>(`${BASE_URL}currentWeatherSummary?city=${encodeURIComponent(location)}`);
+    const response = await axios.get<string>(
+      `${BASE_URL}currentWeatherSummary?city=${encodeURIComponent(location)}`,
+    );
     console.log('Weather summary fetched successfully:', response.data);
     return response.data;
   } catch (error) {

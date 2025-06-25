@@ -33,7 +33,9 @@ const WeatherCard: React.FC = () => {
   const getWeather = async (location: Location) => {
     try {
       const currentWeatherData = await fetchWeatherData(
-        location.name ? `${location.name}, ${location.country}` : `${defaultLocation.name}, ${defaultLocation.country}`,
+        location.name
+          ? `${location.name}, ${location.country}`
+          : `${defaultLocation.name}, ${defaultLocation.country}`,
       );
       setWeather(currentWeatherData);
       setRefreshingWeather(false);
@@ -54,7 +56,9 @@ const WeatherCard: React.FC = () => {
   const getCurrentSummary = async (location: Location) => {
     try {
       const currentWeatherSummary = await fetchCurrentWeatherSummary(
-        location.name ? `${location.name}, ${location.country}` : `${defaultLocation.name}, ${defaultLocation.country}`,
+        location.name
+          ? `${location.name}, ${location.country}`
+          : `${defaultLocation.name}, ${defaultLocation.country}`,
       );
       setCurrWeatherSummary(currentWeatherSummary);
     } catch (err) {
@@ -410,7 +414,9 @@ const WeatherCard: React.FC = () => {
           gap={1}
         >
           <Box>
-            <Typography variant="subtitle2">Weather on {`${weather?.location.name}, ${weather?.location.country}.`}</Typography>
+            <Typography variant="subtitle2">
+              Weather on {`${weather?.location.name}, ${weather?.location.country}.`}
+            </Typography>
             <Typography variant="caption">{weather?.location.localtime}</Typography>
           </Box>
           <Tooltip title="Refresh">
@@ -601,30 +607,31 @@ const WeatherCard: React.FC = () => {
           </Box>
         ) : (
           <>
-          <Typography
-            variant="body2"
-            mt={3}
-            sx={{
-              textAlign: 'justify',
-              fontSize: { xs: '0.85rem', sm: '0.9rem' },
-              lineHeight: 1.5,
-            }}
-          >
-            {currWeatherSummary}
-          </Typography>
-          <Typography
-          variant="body2"
-            mt={3}
-            sx={{
-              textAlign: 'justify',
-              fontSize: { xs: '0.75rem', sm: '0.8rem' },
-              lineHeight: 1.5,
-              color: 'rgba(255, 255, 255, 0.7)',
-              fontStyle: 'italic',
-              marginTop: '1rem'
-            }}>
-            AI insights - AI can make mistakes.
-          </Typography>
+            <Typography
+              variant="body2"
+              mt={3}
+              sx={{
+                textAlign: 'justify',
+                fontSize: { xs: '0.85rem', sm: '0.9rem' },
+                lineHeight: 1.5,
+              }}
+            >
+              {currWeatherSummary}
+            </Typography>
+            <Typography
+              variant="body2"
+              mt={3}
+              sx={{
+                textAlign: 'justify',
+                fontSize: { xs: '0.75rem', sm: '0.8rem' },
+                lineHeight: 1.5,
+                color: 'rgba(255, 255, 255, 0.7)',
+                fontStyle: 'italic',
+                marginTop: '1rem',
+              }}
+            >
+              AI insights - AI can make mistakes.
+            </Typography>
           </>
         )}
       </CardContent>

@@ -171,7 +171,9 @@ describe('WeatherCard Component', () => {
       </LocationContext.Provider>,
     );
 
-    // Check if API was called with new location
-    expect(fetchWeatherData).toHaveBeenCalledWith('Paris');
+    // Check if API was called with new location and country
+    await waitFor(() => {
+      expect(fetchWeatherData).toHaveBeenCalledWith('Paris, France');
+    });
   });
 });

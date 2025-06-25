@@ -33,7 +33,7 @@ const WeatherInputCard = () => {
   const [weatherData, setWeatherData] = useState<WeatherResponse | null>(null);
   const [geoCodeOptions, setGeoCodeOptions] = useState<GeoCodeOption[] | null>(null);
 
-  const handleSearch = (place:string) => {
+  const handleSearch = (place: string) => {
     console.log('Searching weather for:', { place });
 
     if (place) {
@@ -136,8 +136,7 @@ const WeatherInputCard = () => {
                     setPlace('');
                     setGeoCodeOptions(null);
                     return;
-                  }
-                  else if (newValue && typeof newValue === 'object') {
+                  } else if (newValue && typeof newValue === 'object') {
                     console.log('Selected GeoCode:', newValue.value);
                     setPlace(newValue.value);
                     handleSearch(newValue.value);
@@ -210,7 +209,9 @@ const WeatherInputCard = () => {
                 fullWidth
                 variant="contained"
                 startIcon={<SearchIcon />}
-                onClick={()=>{handleSearch(place)}}
+                onClick={() => {
+                  handleSearch(place);
+                }}
                 sx={{
                   py: 1.5,
                   fontWeight: 'bold',
