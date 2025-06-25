@@ -4,6 +4,9 @@ import WeatherDay from './WeatherDay';
 import type { ForecastDay, ForecastResponse } from '../services/responseTypes';
 import { fetchWeatherForecast } from '../services/weatherApi';
 import { LocationContext } from '../context/LocationContext';
+import Skeleton from '@mui/material/Skeleton';
+import ErrorMessage from './ErrorMessage';
+import { SnackbarContext } from '../context/SnackbarContext';
 
 interface FormattedDate {
   short: string;
@@ -14,18 +17,25 @@ const WeatherWeek: React.FC = () => {
   const [weatherData, setWeatherData] = useState<ForecastResponse | null>(null);
   const [selectedTab, setSelectedTab] = useState(0);
   const { location } = useContext(LocationContext);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const { showMessage } = useContext(SnackbarContext);
 
   useEffect(() => {
     const fetchWeather = async () => {
       try {
         const weatherData = await fetchWeatherForecast(location.name ? location.name : 'Colombo');
         setWeatherData(weatherData);
-      } catch (error) {
+      } catch (error: any) {
         console.error('Error fetching weather data:', error);
+        setError(error);
+        showMessage('Error fetching forecasting responses.', 'error');
+      } finally {
+        setLoading(false);
       }
     };
     fetchWeather();
-  }, [location]);
+  }, [location.name]);
 
   // Memoize forecast days and formatted dates
   const { forecastDays, formattedDates } = useMemo(() => {
@@ -52,6 +62,125 @@ const WeatherWeek: React.FC = () => {
   }, []);
 
   const selectedDay = forecastDays[selectedTab];
+
+  if (loading) {
+    return (
+      <Box sx={{ width: '100%', mt: 3 }}>
+        <Skeleton
+          variant="rectangular"
+          animation="wave"
+          width="100%"
+          height={48}
+          sx={{
+            bgcolor: 'transparent',
+            backgroundImage:
+              'linear-gradient(90deg, rgba(135, 206, 235, 0.3) 0%, rgba(176, 224, 255, 0.2) 100%)',
+            borderRadius: 3,
+            '&::after': {
+              background:
+                'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent)',
+            },
+          }}
+        />
+        <Box sx={{ width: '100%', display: 'flex', justifyContent: 'space-evenly' }}>
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width="25%"
+            height={400}
+            sx={{
+              minWidth: 200,
+              m: 2,
+              bgcolor: 'transparent',
+              backgroundImage:
+                'linear-gradient(135deg, rgba(135, 206, 235, 0.15) 0%, rgba(176, 224, 255, 0.1) 100%)',
+              borderRadius: 3,
+              '&::after': {
+                background:
+                  'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+              },
+            }}
+          />
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width="25%"
+            height={400}
+            sx={{
+              minWidth: 200,
+              m: 2,
+              bgcolor: 'transparent',
+              backgroundImage:
+                'linear-gradient(135deg, rgba(135, 206, 235, 0.15) 0%, rgba(176, 224, 255, 0.1) 100%)',
+              borderRadius: 3,
+              '&::after': {
+                background:
+                  'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+              },
+            }}
+          />
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width="25%"
+            height={400}
+            sx={{
+              minWidth: 200,
+              m: 2,
+              bgcolor: 'transparent',
+              backgroundImage:
+                'linear-gradient(135deg, rgba(135, 206, 235, 0.15) 0%, rgba(176, 224, 255, 0.1) 100%)',
+              borderRadius: 3,
+              '&::after': {
+                background:
+                  'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+              },
+            }}
+          />
+          <Skeleton
+            variant="rectangular"
+            animation="wave"
+            width="25%"
+            height={400}
+            sx={{
+              minWidth: 200,
+              m: 2,
+              bgcolor: 'transparent',
+              backgroundImage:
+                'linear-gradient(135deg, rgba(135, 206, 235, 0.15) 0%, rgba(176, 224, 255, 0.1) 100%)',
+              borderRadius: 3,
+              '&::after': {
+                background:
+                  'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent)',
+              },
+            }}
+          />
+        </Box>
+      </Box>
+    );
+  }
+
+  if (error) {
+    return (
+      <Box
+        sx={{
+          width: '100%',
+          mt: 3,
+          background:
+            'linear-gradient(135deg, rgba(176, 224, 255, 0.1) 0%, rgba(225, 245, 254, 0.1) 100%)',
+          backdropFilter: 'blur(15px)',
+          border: '1px solid rgba(176, 224, 255, 0.2)',
+          boxShadow: '0 4px 20px rgba(15, 76, 117, 0.08)',
+          height: '100px',
+          color: '#fff',
+          p: 2,
+          textAlign: 'center',
+        }}
+      >
+        <ErrorMessage message="Failed to fetch forecat weather data. Please check your internet connection or try again later." />
+      </Box>
+    );
+  }
 
   return (
     <Box sx={{ width: '100%', mt: 3 }}>

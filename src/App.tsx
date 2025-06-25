@@ -1,72 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
+import React from 'react';
 import WeatherCard from './components/WeatherCard';
-import LoadingSpinner from './components/LoadingSpinner';
-import ErrorMessage from './components/ErrorMessage';
 import WeatherWeek from './components/WeatherWeek';
-import { fetchWeatherData, fetchCurrentWeatherSummary } from './services/weatherApi';
 import { Typography, CssBaseline, AppBar, Toolbar, Box, Container } from '@mui/material';
 import WbSunnyRounded from '@mui/icons-material/WbSunnyRounded';
 import WeatherInputCard from './components/WeatherInputCard';
-import type { WeatherResponse } from './services/responseTypes';
-import { LocationContext } from './context/LocationContext';
-import type { Location } from './services/responseTypes';
-import { defaultLocation } from './utils/constants';
 
 const App: React.FC = () => {
-  const [weather, setWeather] = useState<WeatherResponse | null>(null);
-  const [currWeatherSummary, setCurrWeatherSummary] = useState<string | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const { location } = useContext(LocationContext);
-
-  console.log('Current location from context:', location);
-
-  const getWeather = async (location: Location) => {
-    try {
-      const currentWeatherData = await fetchWeatherData(
-        location.name ? location.name : defaultLocation.name,
-      );
-      setWeather(currentWeatherData);
-
-      const currentWeatherSummary = await fetchCurrentWeatherSummary(
-        location.name ? location.name : defaultLocation.name,
-      );
-      setCurrWeatherSummary(currentWeatherSummary);
-
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    getWeather(location);
-  }, [location]);
-
-  function calculateAQI_PM25(pm25: number): number {
-    const breakpoints = [
-      { AQI_low: 0, AQI_high: 50, PM_low: 0.0, PM_high: 12.0 },
-      { AQI_low: 51, AQI_high: 100, PM_low: 12.1, PM_high: 35.4 },
-      { AQI_low: 101, AQI_high: 150, PM_low: 35.5, PM_high: 55.4 },
-      { AQI_low: 151, AQI_high: 200, PM_low: 55.5, PM_high: 150.4 },
-      { AQI_low: 201, AQI_high: 300, PM_low: 150.5, PM_high: 250.4 },
-      { AQI_low: 301, AQI_high: 400, PM_low: 250.5, PM_high: 350.4 },
-      { AQI_low: 401, AQI_high: 500, PM_low: 350.5, PM_high: 500.4 },
-    ];
-
-    for (const bp of breakpoints) {
-      if (pm25 >= bp.PM_low && pm25 <= bp.PM_high) {
-        const aqi =
-          ((bp.AQI_high - bp.AQI_low) / (bp.PM_high - bp.PM_low)) * (pm25 - bp.PM_low) + bp.AQI_low;
-        return Math.round(aqi);
-      }
-    }
-
-    return -1;
-  }
-
   return (
     <div className="weather-container">
       <div className="background-effects">
@@ -109,46 +48,23 @@ const App: React.FC = () => {
             minHeight: 'calc(100vh - 120px)',
           }}
         >
-          {loading ? (
-            <LoadingSpinner />
-          ) : error ? (
-            <ErrorMessage message={error} />
-          ) : weather ? (
-            <>
-              <Box
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  flexDirection: { xs: 'column', md: 'row' },
-                  alignItems: 'stretch',
-                  gap: '2rem',
-                  justifyContent: 'space-between',
-                }}
-              >
-                <WeatherCard
-                  location={`${weather.location.name}, ${weather.location.country}.`}
-                  time={weather.location.localtime}
-                  temperature={weather.current.temp_c}
-                  temperatureUnit={'C'}
-                  condition={weather.current.condition.text}
-                  icon={weather.current.condition.icon}
-                  feelsLike={weather.current.feelslike_c}
-                  summary={currWeatherSummary || ''}
-                  airQuality={calculateAQI_PM25(weather.current.air_quality.pm2_5)}
-                  wind={`${weather.current.wind_kph} kph`}
-                  humidity={weather.current.humidity}
-                  visibility={`${weather.current.vis_km} km`}
-                  pressure={`${weather.current.pressure_mb} mb`}
-                  dewPoint={weather.current.dewpoint_c}
-                  onRefresh={() => getWeather(location)}
-                />
-                <WeatherInputCard />
-              </Box>
-              <WeatherWeek />
-            </>
-          ) : null}
+          <>
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: { xs: 'column', md: 'row' },
+                alignItems: 'stretch',
+                gap: '2rem',
+                justifyContent: 'space-between',
+              }}
+            >
+              <WeatherCard />
+              <WeatherInputCard />
+            </Box>
+            <WeatherWeek />
+          </>
         </Container>
-
         <Box
           component="footer"
           sx={{
