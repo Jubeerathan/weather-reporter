@@ -56,7 +56,7 @@ const WeatherInputCard = () => {
   };
 
   return (
-    <Box sx={{width: '100%'}}>
+    <Box sx={{ width: '100%' }}>
       <Card
         sx={{
           p: 4,

@@ -17,11 +17,11 @@ export const LocationProvider = ({ children }: { children: ReactNode }) => {
           fetchGeoCode(position.coords.latitude.toString(), position.coords.longitude.toString())
             .then((geoData) => {
               setLocation({
-                name: geoData.address.city || 'Colombo',
+                name: geoData.address.city || defaultLocation.name,
                 lat: position.coords.latitude,
                 lon: position.coords.longitude,
-                region: geoData.address.state || 'Western',
-                country: geoData.address.country || 'Asia/Colombo',
+                region: geoData.address.state || defaultLocation.region,
+                country: geoData.address.country || defaultLocation.country,
                 tz_id: '',
                 localtime_epoch: Math.floor(Date.now() / 1000),
                 localtime: new Date().toISOString(),

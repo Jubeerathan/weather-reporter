@@ -60,7 +60,7 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        flexDirection='row'
+        flexDirection="row"
         gap={1}
       >
         <Box>
@@ -84,19 +84,13 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
       </Box>
 
       {/* Main Weather Info */}
-      <Box
-        display="flex"
-        alignItems="center"
-        flexDirection='row'
-        mt={3}
-        gap={2}
-      >
+      <Box display="flex" alignItems="center" flexDirection="row" mt={3} gap={2}>
         <img
           src={icon}
           alt={condition}
           style={{
-        width: '48px',
-        height: '48px',
+            width: '48px',
+            height: '48px',
           }}
           srcSet={`
         ${icon} 1x,
@@ -138,13 +132,13 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
         </Box>
         <Box>
           <Typography variant="h6" fontWeight={600}>
-        {condition}
+            {condition}
           </Typography>
           <Typography variant="body2">
-        Feels like{' '}
-        <b>
-          {feelsLike}°{temperatureUnit}
-        </b>
+            Feels like{' '}
+            <b>
+              {feelsLike}°{temperatureUnit}
+            </b>
           </Typography>
         </Box>
       </Box>
@@ -182,31 +176,31 @@ const WeatherCard: React.FC<WeatherCardProps> = ({
         </Tooltip>
         <Tooltip title="Wind speed and direction">
           <Box display="flex" alignItems="center">
-            <AirIcon sx={{ mr: 0.5 , fontSize:'1.2rem'}} />
+            <AirIcon sx={{ mr: 0.5, fontSize: '1.2rem' }} />
             <Typography variant="body2">{wind}</Typography>
           </Box>
         </Tooltip>
         <Tooltip title="Humidity">
           <Box display="flex" alignItems="center">
-            <OpacityIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
+            <OpacityIcon sx={{ mr: 0.5, fontSize: '1.2rem' }} />
             <Typography variant="body2">{humidity}%</Typography>
           </Box>
         </Tooltip>
         <Tooltip title="Visibility">
           <Box display="flex" alignItems="center">
-            <VisibilityIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
+            <VisibilityIcon sx={{ mr: 0.5, fontSize: '1.2rem' }} />
             <Typography variant="body2">{visibility}</Typography>
           </Box>
         </Tooltip>
         <Tooltip title="Pressure">
           <Box display="flex" alignItems="center">
-            <CompressIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
+            <CompressIcon sx={{ mr: 0.5, fontSize: '1.2rem' }} />
             <Typography variant="body2">{pressure}</Typography>
           </Box>
         </Tooltip>
         <Tooltip title="Dew point">
           <Box display="flex" alignItems="center">
-            <DeviceThermostatIcon sx={{ mr: 0.5, fontSize:'1.2rem' }} />
+            <DeviceThermostatIcon sx={{ mr: 0.5, fontSize: '1.2rem' }} />
             <Typography variant="body2">
               {dewPoint}°{temperatureUnit}
             </Typography>
