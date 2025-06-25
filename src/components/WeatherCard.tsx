@@ -20,6 +20,7 @@ const WeatherCard: React.FC = () => {
   const [weather, setWeather] = useState<WeatherResponse | null>(null);
   const [currWeatherSummary, setCurrWeatherSummary] = useState<string | null>(null);
   const [loadingWeather, setLoadingWeather] = useState(true);
+  const [refreshingWeather, setRefreshingWeather] = useState(false);
   const [loadingSummary, setLoadingSummary] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { location } = useContext(LocationContext);
@@ -35,6 +36,7 @@ const WeatherCard: React.FC = () => {
         location.name ? location.name : defaultLocation.name,
       );
       setWeather(currentWeatherData);
+      setRefreshingWeather(false);
 
       // Calculate air quality index based on PM2.5
       const pm25 = currentWeatherData.current.air_quality.pm2_5;
@@ -66,6 +68,16 @@ const WeatherCard: React.FC = () => {
   useEffect(() => {
     getWeather(location);
     getCurrentSummary(location);
+
+    const interval = setInterval(() => {
+      setRefreshingWeather(true);
+      Promise.all([getWeather(location), getCurrentSummary(location)]).finally(() => {
+      setRefreshingWeather(false);
+      });
+    }, 5 * 60 * 1000); // Refresh every 5 minutes
+
+    return () => clearInterval(interval);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.name]);
 
@@ -398,22 +410,33 @@ const WeatherCard: React.FC = () => {
             <Typography variant="subtitle2">Weather on {weather?.location.name}</Typography>
             <Typography variant="caption">{weather?.location.localtime}</Typography>
           </Box>
-          <Tooltip title="Refresh">
+            <Tooltip title="Refresh">
             <Chip
-              icon={<RefreshIcon />}
-              label="Refresh"
+              icon={
+              <RefreshIcon
+                sx={{
+                animation: refreshingWeather ? 'spin 1s linear infinite' : 'none',
+                '@keyframes spin': {
+                  '0%': { transform: 'rotate(0deg)' },
+                  '100%': { transform: 'rotate(360deg)' },
+                },
+                }}
+              />
+              }
+              label={refreshingWeather ? 'Refreshing...' : 'Refresh'}
               size="small"
               sx={{
-                background: 'rgba(255,255,255,0.08)',
-                color: '#fff',
-                fontWeight: 500,
+              background: 'rgba(255,255,255,0.08)',
+              color: '#fff',
+              fontWeight: 500,
               }}
               clickable
               onClick={() => {
-                getWeather(location);
+              setRefreshingWeather(true);
+              getWeather(location);
               }}
             />
-          </Tooltip>
+            </Tooltip>
         </Box>
 
         {/* Main Weather Info */}
