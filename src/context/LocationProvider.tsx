@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { ReactNode } from 'react';
-import type { Location } from '../services/responseTypes';
+import type { Location } from '../utils/types';
 import { SnackbarContext } from './SnackbarContext';
 import { fetchGeoCode } from '../services/geoLocationApi';
 import { LocationContext } from './LocationContext';

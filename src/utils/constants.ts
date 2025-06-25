@@ -1,4 +1,4 @@
-import type { Location } from '../services/responseTypes';
+import type { Location } from './types';
 
 export const defaultLocation: Location = {
   name: 'Colombo',

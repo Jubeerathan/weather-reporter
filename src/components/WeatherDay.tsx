@@ -1,7 +1,7 @@
 import React, { memo } from 'react';
 import { Box, Typography } from '@mui/material';
 import WeatherHour from './WeatherHourCard';
-import type { ForecastDay } from '../services/responseTypes';
+import type { ForecastDay } from '../utils/types';
 
 const WeatherDay: React.FC<ForecastDay> = memo(({ date, hour }) => {
   const formatDate = (dateString: string) => {

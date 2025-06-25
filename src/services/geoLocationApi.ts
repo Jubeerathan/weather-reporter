@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { GeoCode } from './responseTypes';
+import type { GeoCode } from '../utils/types';
 
 const BASE_URL = import.meta.env.VITE_BACKEND_CHOREO_URL;
 

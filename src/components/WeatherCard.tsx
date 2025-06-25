@@ -8,9 +8,9 @@ import DeviceThermostatIcon from '@mui/icons-material/DeviceThermostat';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import FiberMannualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import { fetchWeatherData, fetchCurrentWeatherSummary } from '../services/weatherApi';
-import type { WeatherResponse } from '../services/responseTypes';
+import type { WeatherResponse } from '../utils/types';
 import { LocationContext } from '../context/LocationContext';
-import type { Location } from '../services/responseTypes';
+import type { Location } from '../utils/types';
 import { defaultLocation } from '../utils/constants';
 import Skeleton from '@mui/material/Skeleton';
 import { SnackbarContext } from '../context/SnackbarContext';
@@ -66,6 +66,7 @@ const WeatherCard: React.FC = () => {
   useEffect(() => {
     getWeather(location);
     getCurrentSummary(location);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.name]);
 
   function calculateAQI_PM25(pm25: number): number {
@@ -360,7 +361,7 @@ const WeatherCard: React.FC = () => {
           backdropFilter: 'blur(8px)',
           border: '1px solid rgba(255, 255, 255, 0.08)',
           width: '100%',
-          textAlign: 'center'
+          textAlign: 'center',
         }}
       >
         <ErrorMessage

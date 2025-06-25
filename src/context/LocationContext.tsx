@@ -1,5 +1,5 @@
 import React, { createContext } from 'react';
-import type { Location } from '../services/responseTypes';
+import type { Location } from '../utils/types';
 import { defaultLocation } from '../utils/constants';
 
 type LocationContextProps = {

@@ -14,7 +14,7 @@ import MapIcon from '@mui/icons-material/Map';
 import SearchIcon from '@mui/icons-material/Search';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import { fetchWeatherData } from '../services/weatherApi';
-import type { WeatherResponse } from '../services/responseTypes';
+import type { WeatherResponse } from '../utils/types';
 import MapWithMarker from './MapWithMarker';
 import { LocationContext } from '../context/LocationContext';
 import { SnackbarContext } from '../context/SnackbarContext';

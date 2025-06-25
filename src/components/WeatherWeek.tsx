@@ -1,12 +1,14 @@
 import React, { useState, useMemo, useCallback, useEffect, useContext } from 'react';
 import { Box, Tabs, Tab } from '@mui/material';
 import WeatherDay from './WeatherDay';
-import type { ForecastDay, ForecastResponse } from '../services/responseTypes';
+import type { ForecastDay, ForecastResponse } from '../utils/types';
 import { fetchWeatherForecast } from '../services/weatherApi';
 import { LocationContext } from '../context/LocationContext';
 import Skeleton from '@mui/material/Skeleton';
 import ErrorMessage from './ErrorMessage';
 import { SnackbarContext } from '../context/SnackbarContext';
+import type { Location } from '../utils/types';
+import { defaultLocation } from '../utils/constants';
 
 interface FormattedDate {
   short: string;
@@ -22,10 +24,13 @@ const WeatherWeek: React.FC = () => {
   const { showMessage } = useContext(SnackbarContext);
 
   useEffect(() => {
-    const fetchWeather = async () => {
+    const fetchWeather = async (location: Location) => {
       try {
-        const weatherData = await fetchWeatherForecast(location.name ? location.name : 'Colombo');
+        const weatherData = await fetchWeatherForecast(
+          location.name ? location.name : defaultLocation.name,
+        );
         setWeatherData(weatherData);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
       } catch (error: any) {
         console.error('Error fetching weather data:', error);
         setError(error);
@@ -34,7 +39,8 @@ const WeatherWeek: React.FC = () => {
         setLoading(false);
       }
     };
-    fetchWeather();
+    fetchWeather(location);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.name]);
 
   // Memoize forecast days and formatted dates
