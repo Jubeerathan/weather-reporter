@@ -69,12 +69,15 @@ const WeatherCard: React.FC = () => {
     getWeather(location);
     getCurrentSummary(location);
 
-    const interval = setInterval(() => {
-      setRefreshingWeather(true);
-      Promise.all([getWeather(location), getCurrentSummary(location)]).finally(() => {
-      setRefreshingWeather(false);
-      });
-    }, 5 * 60 * 1000); // Refresh every 5 minutes
+    const interval = setInterval(
+      () => {
+        setRefreshingWeather(true);
+        Promise.all([getWeather(location), getCurrentSummary(location)]).finally(() => {
+          setRefreshingWeather(false);
+        });
+      },
+      5 * 60 * 1000,
+    ); // Refresh every 5 minutes
 
     return () => clearInterval(interval);
 
@@ -410,33 +413,33 @@ const WeatherCard: React.FC = () => {
             <Typography variant="subtitle2">Weather on {weather?.location.name}</Typography>
             <Typography variant="caption">{weather?.location.localtime}</Typography>
           </Box>
-            <Tooltip title="Refresh">
+          <Tooltip title="Refresh">
             <Chip
               icon={
-              <RefreshIcon
-                sx={{
-                animation: refreshingWeather ? 'spin 1s linear infinite' : 'none',
-                '@keyframes spin': {
-                  '0%': { transform: 'rotate(0deg)' },
-                  '100%': { transform: 'rotate(360deg)' },
-                },
-                }}
-              />
+                <RefreshIcon
+                  sx={{
+                    animation: refreshingWeather ? 'spin 1s linear infinite' : 'none',
+                    '@keyframes spin': {
+                      '0%': { transform: 'rotate(0deg)' },
+                      '100%': { transform: 'rotate(360deg)' },
+                    },
+                  }}
+                />
               }
               label={refreshingWeather ? 'Refreshing...' : 'Refresh'}
               size="small"
               sx={{
-              background: 'rgba(255,255,255,0.08)',
-              color: '#fff',
-              fontWeight: 500,
+                background: 'rgba(255,255,255,0.08)',
+                color: '#fff',
+                fontWeight: 500,
               }}
               clickable
               onClick={() => {
-              setRefreshingWeather(true);
-              getWeather(location);
+                setRefreshingWeather(true);
+                getWeather(location);
               }}
             />
-            </Tooltip>
+          </Tooltip>
         </Box>
 
         {/* Main Weather Info */}

@@ -269,4 +269,5 @@ export interface Address {
   postcode?: string;
   country?: string;
   country_code?: string;
+  name?: string;
 }

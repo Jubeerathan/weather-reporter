@@ -18,12 +18,20 @@ import type { WeatherResponse } from '../utils/types';
 import MapWithMarker from './MapWithMarker';
 import { LocationContext } from '../context/LocationContext';
 import { SnackbarContext } from '../context/SnackbarContext';
+import { fetchLocationSuggestions } from '../services/geoLocationApi';
+import Autocomplete from '@mui/material/Autocomplete';
+
+interface GeoCodeOption {
+  label: string;
+  value: string;
+}
 
 const WeatherInputCard = () => {
   const { location, setLocation } = useContext(LocationContext);
   const { showMessage } = useContext(SnackbarContext);
   const [place, setPlace] = useState('');
   const [weatherData, setWeatherData] = useState<WeatherResponse | null>(null);
+  const [geoCodeOptions, setGeoCodeOptions] = useState<GeoCodeOption[] | null>(null);
 
   const handleSearch = () => {
     console.log('Searching weather for:', { place });
@@ -52,6 +60,36 @@ const WeatherInputCard = () => {
     } else {
       showMessage('Please enter a place to search for weather', 'warning');
       console.warn('Please enter both place');
+    }
+  };
+
+  const handleGeoCodeAutoComplete = (place: string) => {
+    console.log('Fetching geocode for:', { place });
+
+    if (place.trim() === '' || place.length >= 2) {
+      fetchLocationSuggestions(place)
+        .then((data) => {
+          console.log('Geocode data:', data);
+          if (data.length === 0) {
+            showMessage('No location found for the entered place', 'warning');
+            return;
+          }
+          const options: GeoCodeOption[] = data
+            .map((item) => ({
+              label: `${item.address.name}, ${item.address.country_code}`,
+              value: `${item.address.name}, ${item.address.country}`,
+            }))
+            .filter(
+              (option, index, self) => index === self.findIndex((o) => o.label === option.label),
+            );
+          setGeoCodeOptions(options);
+          console.log('GeoCodes set:', options);
+        })
+        .catch((error) => {
+          console.error('Error fetching geocode data:', error.message);
+        });
+    } else {
+      setGeoCodeOptions([]);
     }
   };
 
@@ -89,27 +127,80 @@ const WeatherInputCard = () => {
               size={{ xs: 12, md: 6 }}
               sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: 3 }}
             >
-              <TextField
-                fullWidth
-                variant="filled"
-                label="Enter Place"
-                value={place}
-                onChange={(e) => setPlace(e.target.value)}
-                slotProps={{
-                  input: {
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <MapIcon fontSize="small" />
-                      </InputAdornment>
-                    ),
-                    sx: {
-                      backgroundColor: 'rgba(255,255,255,0.08)',
-                      borderRadius: 2,
-                      color: 'white',
+              <Autocomplete
+                freeSolo
+                options={geoCodeOptions || []}
+                getOptionLabel={(option) => (typeof option === 'string' ? option : option.label)}
+                onChange={(_event, newValue) => {
+                  if (newValue === null) {
+                    setPlace('');
+                    setGeoCodeOptions(null);
+                    return;
+                  }
+                  if (newValue && typeof newValue === 'object') {
+                    setPlace(newValue.value);
+                  } else {
+                    setPlace(newValue as string);
+                  }
+                  handleSearch();
+                }}
+                onInputChange={(_event, newInputValue) => {
+                  _event.preventDefault();
+                  setPlace(newInputValue);
+                  handleGeoCodeAutoComplete(newInputValue);
+                }}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    variant="filled"
+                    label="Enter Place"
+                    fullWidth
+                    InputProps={{
+                      ...params.InputProps,
+                      startAdornment: (
+                        <InputAdornment position="start" sx={{ mb: 2 }}>
+                          <MapIcon fontSize="small" />
+                        </InputAdornment>
+                      ),
+                      sx: {
+                        backgroundColor: 'rgba(255,255,255,0.08)',
+                        borderRadius: 2,
+                        color: 'white',
+                      },
+                    }}
+                    InputLabelProps={{
+                      style: { color: 'white' },
+                    }}
+                  />
+                )}
+                sx={{
+                  width: '100%',
+                  '& .MuiInputBase-root': {
+                    backgroundColor: 'rgba(255,255,255,0.08)',
+                    borderRadius: 2,
+                    color: 'white',
+                  },
+                  '& .MuiAutocomplete-inputRoot': {
+                    backgroundColor: 'rgba(255,255,255,0.08)',
+                    borderRadius: 2,
+                    color: 'white',
+                  },
+                  '& .MuiAutocomplete-popupIndicator': {
+                    color: 'white',
+                  },
+                  '& .MuiAutocomplete-endAdornment': {
+                    color: 'white',
+                  },
+                  '& .MuiAutocomplete-option': {
+                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    color: 'white',
+                    '&:hover': {
+                      backgroundColor: 'rgba(255,255,255,0.2)',
                     },
                   },
-                  inputLabel: {
-                    style: { color: 'white' },
+                  '& .MuiAutocomplete-option[aria-selected="true"]': {
+                    backgroundColor: 'rgba(255,255,255,0.2)',
+                    color: 'white',
                   },
                 }}
               />
