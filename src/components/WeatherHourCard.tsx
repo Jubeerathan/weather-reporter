@@ -9,7 +9,7 @@ import CompressIcon from '@mui/icons-material/Compress';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 import GrainIcon from '@mui/icons-material/Grain';
 
-interface WeatherHourProps {
+export interface WeatherHourProps {
   hour: string;
   icon: string;
   temp_c: number;

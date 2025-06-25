@@ -39,7 +39,7 @@ const WeatherCard: React.FC = () => {
       setRefreshingWeather(false);
 
       // Calculate air quality index based on PM2.5
-      const pm25 = currentWeatherData.current.air_quality.pm2_5;
+      const pm25 = currentWeatherData.current.air_quality.pm2_5 ?? 0;
       setAirQuality(calculateAQI_PM25(pm25));
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

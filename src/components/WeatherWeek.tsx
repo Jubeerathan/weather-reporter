@@ -183,7 +183,7 @@ const WeatherWeek: React.FC = () => {
           textAlign: 'center',
         }}
       >
-        <ErrorMessage message="Failed to fetch forecat weather data. Please check your internet connection or try again later." />
+        <ErrorMessage message="Failed to fetch forecast weather data. Please check your internet connection or try again later." />
       </Box>
     );
   }
